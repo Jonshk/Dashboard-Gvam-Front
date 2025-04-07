@@ -1,0 +1,140 @@
+<div class="logo-wrapper">
+  <a [routerLink]="['/']">
+    <img class="img-fluid" src="assets/images/logo/logo.png" alt="" />
+  </a>
+  <div class="back-btn">
+    <i class="fa fa-angle-left" (click)="openMenu()"></i>
+  </div>
+</div>
+<div class="logo-icon-wrapper">
+  <a [routerLink]="['/']">
+    <img class="img-fluid" src="assets/images/logo/logo-icon.png" alt="" />
+  </a>
+</div>
+<nav class="sidebar-main">
+  <div
+    class="left-arrow"
+    id="left-arrow"
+    [class.d-none]="leftArrowNone"
+    (click)="scrollToLeft()"
+  >
+    <app-feathericon [icon]="'arrow-left'"></app-feathericon>
+  </div>
+  <div
+    id="sidebar-menu"
+    [ngStyle]="{
+      marginLeft:
+        this.layout.config.settings.sidebar_type == 'horizontal-wrapper'
+          ? margin + 'px'
+          : '0px',
+    }"
+  >
+    <ul
+      class="sidebar-links theme-scrollbar d-flex flex-column"
+      id="simple-bar"
+    >
+      <li class="back-btn">
+        <a href="javascript:void(0)">
+          <img
+            class="img-fluid"
+            src="assets/images/logo/logo-icon.png"
+            alt=""
+          />
+        </a>
+        <div class="mobile-back text-end">
+          <span>Back</span>
+          <i class="fa fa-angle-right ps-2" aria-hidden="true"></i>
+        </div>
+      </li>
+      <li class="pin-title sidebar-main-title" [class.show]="pined">
+        <div>
+          <h6>Pinned</h6>
+        </div>
+      </li>
+      <ng-container
+        *ngTemplateOutlet="recursiveMenu; context: { $implicit: menuItems }"
+      ></ng-container>
+      <ng-template #recursiveMenu let-menuItems>
+        @for (item of menuItems; track item) {
+          <li
+            [ngClass]="{
+              'sidebar-list': item.level == 1,
+              'sidebar-main-title': item.headTitle1,
+            }"
+            [class.pined]="isPined(item.id)"
+          >
+            @if (item.headTitle1) {
+              <div>
+                <h6>{{ item.headTitle1 | translate }}</h6>
+              </div>
+            }
+            @if (item.level == 1) {
+              <i class="fa fa-thumb-tack" (click)="togglePined(item.id)"></i>
+            }
+            @if (item.type === "extTabLink") {
+              <a href="{{ !item.type ? null : item.path }}">
+                {{ item.title | translate }}
+              </a>
+            } @else {
+              @if (!item.headTitle1) {
+                <a
+                  [ngClass]="{
+                    'sidebar-link sidebar-title': item.level == 1,
+                    'submenu-title': item.level == 2,
+                    actived: item.active && item.level === 1,
+                  }"
+                  [routerLink]="item.path"
+                  (click)="toggleMenu(item)"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                >
+                  @if (item.icon && item.level == 1) {
+                    <app-svg-icon [icon]="item.icon"></app-svg-icon>
+                  }
+                  @if (item.level == 1) {
+                    <span>{{ item.title | translate }}</span>
+                  } @else {
+                    {{ item.title | translate }}
+                  }
+                  <div class="according-menu">
+                    @if (item.children) {
+                      <i
+                        class="fa fa-angle-{{
+                          item.active ? 'down' : 'right'
+                        }} pull-right"
+                      ></i>
+                    }
+                  </div>
+                </a>
+              }
+            }
+            @if (item.children) {
+              <ul
+                [ngClass]="{
+                  'sidebar-submenu': item.level == 1,
+                  'nav-sub-childmenu submenu-content': item.level == 2,
+                }"
+                [style.display]="item.active ? 'block' : 'none'"
+              >
+                <ng-container
+                  *ngTemplateOutlet="
+                    recursiveMenu;
+                    context: { $implicit: item.children }
+                  "
+                ></ng-container>
+              </ul>
+            }
+          </li>
+        }
+      </ng-template>
+    </ul>
+    <div
+      class="right-arrow"
+      id="right-arrow"
+      [class.d-none]="rightArrowNone"
+      (click)="scrollToRight()"
+    >
+      <app-feathericon [icon]="'arrow-right'"></app-feathericon>
+    </div>
+  </div>
+</nav>

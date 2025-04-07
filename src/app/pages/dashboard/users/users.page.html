@@ -1,0 +1,60 @@
+<main class="container-fluid">
+  <button class="btn btn-primary" (click)="createMode()">
+    Crear nuevo usuario de dispositivo
+  </button>
+
+  <!--Por ahora se deja sin hacer-->
+  <!--
+  @if (groupId()) {
+    <button class="btn btn-primary" style="margin-left: 2%" (click)="addMode()">
+      Añadir usuario existente
+    </button>
+  }
+    -->
+
+  <app-dialog [open]="showDialog()" (openChange)="hideDialog()">
+    <app-user-form
+      [isVisible]="showDialog()"
+      [editUser]="userToEdit"
+      (user)="addUser($event)"
+    ></app-user-form>
+  </app-dialog>
+
+  <!-- 
+  <app-dialog
+    [open]="showSelectionDialog()"
+    (openChange)="hideSelectionDialog()"
+  >
+    <app-user-selection-form
+      [groupId]="groupId()"
+      [isVisible]="showSelectionDialog()"
+      [groupUsers]="users"
+      (user)="addUser($event)"
+    ></app-user-selection-form>
+  </app-dialog>
+  -->
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="'¿Eliminar el usuario ' + userToDelete?.name + '?'"
+    (onDelete)="onDeleteConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <ul class="list-group my-2">
+    @for (user of users; track user.deviceUserId) {
+      <li class="list-group-item">
+        <app-user-list-item
+          [user]="user"
+          (onEditUser)="editUser($event)"
+          (onDeleteUser)="deleteUser($event)"
+        ></app-user-list-item>
+      </li>
+    }
+  </ul>
+
+  <footer>
+    <app-paginator (onPageChange)="loadPaginatedUsers($event)"></app-paginator>
+  </footer>
+</main>

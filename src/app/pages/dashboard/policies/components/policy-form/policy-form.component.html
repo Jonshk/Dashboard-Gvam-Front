@@ -1,0 +1,475 @@
+<form
+  class="d-flex flex-column gap-3"
+  [formGroup]="policyForm"
+  (ngSubmit)="onSubmit()"
+>
+  <!--
+  @if (!groupId()) {
+    <label>
+      Grupo
+      <select class="form-select" name="group" formControlName="group">
+        @for (group of groups(); track group.groupId) {
+          <option [value]="group.groupId">
+            {{ group.groupName }}
+          </option>
+        }
+      </select>
+    </label>
+  }
+-->
+  <label>
+    Nombre de la política
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      formControlName="name"
+    />
+    @if (policyName?.invalid && (policyName?.dirty || policyName?.touched)) {
+      @if (policyName?.hasError("required")) {
+        <small class="text-danger">El nombre es obligatorio</small>
+      }
+      @if (policyName?.hasError("pattern")) {
+        <small class="text-danger"
+          >El nombre ha de ser alfanumérico y no puede contener espacios en
+          blanco</small
+        >
+      }
+    }
+  </label>
+
+  @if (groupId()) {
+    <div class="form-check checkbox-checked">
+      <label class="form-check-label">
+        Establecer como política por defecto del grupo
+        <input
+          type="checkbox"
+          class="form-check-input"
+          name="isDefault"
+          formControlName="isDefault"
+        />
+      </label>
+    </div>
+  }
+
+  <div
+    class="d-flex flex-column"
+    name="applicationPolicies"
+    formArrayName="applicationPolicies"
+  >
+    Politica de aplicaciones
+    <button
+      type="button"
+      class="btn btn-outline-primary my-2"
+      (click)="addApplicationPolicy()"
+    >
+      Añadir aplicación
+    </button>
+    @for (
+      application of applicationPolicy.controls;
+      track application.value;
+      let i = $index
+    ) {
+      <div class="d-flex flex-column gap-2" [formGroupName]="i">
+        <label>
+          Paquete de la aplicación
+          <input
+            type="text"
+            class="form-control"
+            name="packageName"
+            formControlName="packageName"
+          />
+
+          @if (application.get("packageName")?.invalid) {
+            @if (application.get("packageName")?.hasError("required")) {
+              <small class="text-danger"
+                >El nombre del paquete es obligatorio</small
+              >
+            }
+          }
+        </label>
+
+        <label>
+          Tipo de instalación
+          <select
+            class="form-select"
+            name="installType"
+            formControlName="installType"
+          >
+            @for (installType of installTypeKeys; track installType) {
+              <option [value]="InstallType[installType]">
+                {{ InstallTypeDescription[installType] }}
+              </option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Política de permisos
+          <select
+            class="form-select"
+            name="defaultPermissionPolicy"
+            formControlName="defaultPermissionPolicy"
+          >
+            @for (
+              permissionPolicy of permissionPolicyKeys;
+              track permissionPolicy
+            ) {
+              <option [value]="PermissionPolicy[permissionPolicy]">
+                {{ PermissionPolicyDescription[permissionPolicy] }}
+              </option>
+            }
+          </select>
+        </label>
+
+        <div class="form-check checkbox-checked">
+          <label class="form-check-label">
+            Deshabilitada
+            <input
+              type="checkbox"
+              class="form-check-input"
+              name="disabled"
+              formControlName="disabled"
+            />
+          </label>
+        </div>
+
+        <label>
+          Modo de autoactualización
+          <select
+            class="form-select"
+            name="autoUpdateMode"
+            formControlName="autoUpdateMode"
+          >
+            @for (autoUpdateMode of autoUpdateModeKeys; track autoUpdateMode) {
+              <option [value]="AutoUpdateMode[autoUpdateMode]">
+                {{ AutoUpdateModeDescription[autoUpdateMode] }}
+              </option>
+            }
+          </select>
+        </label>
+
+        <button
+          type="button"
+          class="btn btn-outline-danger my-2"
+          (click)="removeApplicationPolicy(i)"
+        >
+          Eliminar aplicación
+        </button>
+      </div>
+    }
+  </div>
+  <label>
+    Estado del Wifi
+    <select class="form-select" name="wifiState" formControlName="wifiState">
+      @for (wifiState of wifiStateKeys; track wifiState) {
+        <option [value]="WifiState[wifiState]">
+          {{ WifiStateDescription[wifiState] }}
+        </option>
+      }
+    </select>
+    @if (wifiState.value === WifiState.DISABLED) {
+      <small class="text-warning"
+        >Si deshabilitas el Wifi, asegúrate de tener conexión con datos <br />
+        móviles en los dispositivos en los que se aplique esta política.
+      </small>
+    }
+  </label>
+
+  <div
+    class="d-flex flex-column gap-3"
+    name="wifiSsidPolicy"
+    formGroupName="wifiSsidPolicy"
+  >
+    Política de SSID
+    <label
+      >Tipo de política
+      <select
+        class="form-select"
+        name="wifiSsidPolicyType"
+        formControlName="wifiSsidPolicyType"
+      >
+        @for (
+          wifiSsidPolicyType of wifiSsidPolicyTypeKeys;
+          track wifiSsidPolicyType
+        ) {
+          <option [value]="WifiSsidPolicyType[wifiSsidPolicyType]">
+            {{ WifiSsidPolicyTypeDescription[wifiSsidPolicyType] }}
+          </option>
+        }
+      </select>
+    </label>
+    <label>
+      SSID
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="addWifiSsid()"
+      >
+        Añadir SSID
+      </button>
+    </label>
+    <div class="d-flex flex-column gap-2" formArrayName="wifiSsids">
+      @for (ssid of wifiSsids.controls; track ssid; let j = $index) {
+        <div class="d-flex flex-column">
+          <div class="d-flex align-items-center gap-2">
+            <input
+              type="text"
+              class="form-control form-control-sm col"
+              [name]="'ssid' + j"
+              [formControlName]="j"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm col"
+              (click)="removeWifiSsid(j)"
+            >
+              Eliminar SSID
+            </button>
+          </div>
+          @if (ssid?.invalid) {
+            @if (ssid?.hasError("required")) {
+              <small class="text-danger">El SSID es obligatorio</small>
+            }
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <label>
+    Modo de localización
+    <select
+      class="form-select"
+      name="locationMode"
+      formControlName="locationMode"
+    >
+      @for (locationMode of locationModeKeys; track locationMode) {
+        <option [value]="LocationMode[locationMode]">
+          {{ LocationModeDescription[locationMode] }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <div class="form-check checkbox-checked">
+    <label class="form-check-label">
+      Bluetooth deshabilitado
+      <input
+        type="checkbox"
+        class="form-check-input"
+        name="bluetoothDisabled"
+        formControlName="bluetoothDisabled"
+      />
+    </label>
+  </div>
+
+  <div class="form-check checkbox-checked">
+    <label class="form-check-label">
+      Ajustar volumen deshabilitado
+      <input
+        type="checkbox"
+        class="form-check-input"
+        name="adjustVolumeDisabled"
+        formControlName="adjustVolumeDisabled"
+      />
+    </label>
+  </div>
+
+  <label>
+    Botón de encendido
+    <select
+      class="form-select"
+      name="powerButtonAction"
+      formControlName="powerButtonAction"
+    >
+      @for (
+        powerButtonAction of powerButtonActionKeys;
+        track powerButtonAction
+      ) {
+        <option [value]="PowerButtonAction[powerButtonAction]">
+          {{ PowerButtonActionDescription[powerButtonAction] }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Acceso de datos USB
+    <select
+      class="form-select"
+      name="usbDataAccess"
+      formControlName="usbDataAccess"
+    >
+      @for (usbDataAccess of usbDataAccesKeys; track usbDataAccess) {
+        <option [value]="UsbDataAccess[usbDataAccess]">
+          {{ UsbDataAccessDescription[usbDataAccess] }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <div class="form-check checkbox-checked">
+    <label class="form-check-label">
+      Restablecimiento a fábrica deshabilitado
+      <input
+        type="checkbox"
+        class="form-check-input"
+        name="factoryResetDisabled"
+        formControlName="factoryResetDisabled"
+      />
+    </label>
+  </div>
+
+  <div class="form-check checkbox-checked">
+    <label class="form-check-label">
+      Instalación de aplicaciones deshabilitado
+      <input
+        type="checkbox"
+        class="form-check-input"
+        name="installAppsDisabled"
+        formControlName="installAppsDisabled"
+      />
+    </label>
+  </div>
+
+  <label>
+    Opciones de desarrollador
+    <select
+      class="form-select"
+      name="developerSettings"
+      formControlName="developerSettings"
+    >
+      @for (
+        developerSettings of developerSettingsKeys;
+        track developerSettings
+      ) {
+        <option [value]="DeveloperSettings[developerSettings]">
+          {{ DeveloperSettingsDescription[developerSettings] }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <div
+    class="d-flex flex-column gap-3"
+    name="displaySettings"
+    formGroupName="displaySettings"
+  >
+    Configuración de pantalla
+
+    <div
+      class="d-flex flex-column gap-2"
+      name="screenBrightnessSettings"
+      formGroupName="screenBrightnessSettings"
+    >
+      Configuración de brillo
+      <label>
+        Modo de configuración
+        <select
+          class="form-select"
+          name="screenBrightnessMode"
+          formControlName="screenBrightnessMode"
+        >
+          @for (
+            screenBrightnessMode of screenBrightnessModeKeys;
+            track screenBrightnessMode
+          ) {
+            <option [value]="ScreenBrightnessMode[screenBrightnessMode]">
+              {{ ScreenBrightnessModeDescription[screenBrightnessMode] }}
+            </option>
+          }
+        </select>
+      </label>
+      @if (
+        policyForm.value.displaySettings?.screenBrightnessSettings
+          ?.screenBrightnessMode === ScreenBrightnessMode.AUTOMATIC ||
+        policyForm.value.displaySettings?.screenBrightnessSettings
+          ?.screenBrightnessMode === ScreenBrightnessMode.FIXED
+      ) {
+        <label>
+          Nivel de brillo:
+          {{
+            policyForm.value.displaySettings?.screenBrightnessSettings
+              ?.screenBrightness
+          }}
+          <input
+            type="range"
+            name="screenBrightness"
+            formControlName="screenBrightness"
+            class="form-range"
+            min="1"
+            max="255"
+          />
+        </label>
+      }
+    </div>
+
+    <div
+      class="d-flex flex-column gap-2"
+      name="screenTimeoutSettings"
+      formGroupName="screenTimeoutSettings"
+    >
+      Configuración tiempo de pantalla
+      <label>
+        Modo de configuración
+        <select
+          class="form-select"
+          name="screenTimeoutMode"
+          formControlName="screenTimeoutMode"
+        >
+          @for (
+            screenTimeoutMode of screenTimeoutModeKeys;
+            track screenTimeoutMode
+          ) {
+            <option [value]="ScreenTimeoutMode[screenTimeoutMode]">
+              {{ ScreenTimeoutModeDescription[screenTimeoutMode] }}
+            </option>
+          }
+        </select>
+      </label>
+
+      @if (
+        policyForm.value.displaySettings?.screenTimeoutSettings
+          ?.screenTimeoutMode === ScreenTimeoutMode.ENFORCED
+      ) {
+        <label>
+          Tiempo de espera (segundos)
+          <input
+            type="number"
+            class="form-control"
+            name="screenTimeout"
+            formControlName="screenTimeout"
+          />
+          <small
+            >El tiempo de espera ha de ser menor que el tiempo máximo de bloqueo
+            en caso de establecer un valor</small
+          >
+        </label>
+      }
+    </div>
+  </div>
+
+  <label>
+    Tiempo máximo de espera para el bloqueo (milisegundos)
+    <input
+      type="number"
+      class="form-control"
+      name="maximumTimeToLock"
+      formControlName="maximumTimeToLock"
+    />
+    <small>El valor 0 significa que no hay restricciones</small>
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary w-100"
+    [disabled]="policyForm.invalid || loadingService.isLoading()"
+  >
+    @if (editPolicy()) {
+      Editar política
+    } @else {
+      Crear política
+    }
+  </button>
+</form>

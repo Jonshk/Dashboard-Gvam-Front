@@ -1,0 +1,27 @@
+<form
+  class="d-flex flex-column"
+  [formGroup]="groupForm"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    Nombre del grupo
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      formControlName="name"
+    />
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary mt-2"
+    [disabled]="groupForm.invalid || loadingService.isLoading()"
+  >
+    @if (editGroup()) {
+      Editar grupo
+    } @else {
+      Crear grupo
+    }
+  </button>
+</form>

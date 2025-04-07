@@ -1,0 +1,24 @@
+<form
+  class="d-flex flex-column gap-3"
+  [formGroup]="userForm"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    Usuarios
+    <select class="form-select" name="user" formControlName="user">
+      @for (user of users; track user.email) {
+        <option [value]="user.email">
+          {{ user.email }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary mt-2"
+    [disabled]="userForm.invalid"
+  >
+  Añadir usuario
+  </button>
+</form>

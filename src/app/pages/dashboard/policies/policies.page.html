@@ -1,0 +1,70 @@
+<main class="container-fluid">
+  <button class="btn btn-primary" (click)="createMode()">
+    Crear nueva política
+  </button>
+
+  @if (groupId()) {
+    <button class="btn btn-primary" style="margin-left: 2%" (click)="addMode()">
+      Añadir politica existente
+    </button>
+  }
+
+  <app-dialog [open]="showFormDialog()" (openChange)="hideFormDialog()">
+    <app-policy-form
+      [groupId]="groupId()"
+      [groups]="groups"
+      [isVisible]="showFormDialog()"
+      [editPolicy]="policyToEdit"
+      (policy)="addPolicy($event)"
+    ></app-policy-form>
+  </app-dialog>
+
+  <app-dialog
+    [open]="showSelectionDialog()"
+    (openChange)="hideSelectionDialog()"
+  >
+    <app-policy-selection-form
+      [groupId]="groupId()"
+      [isVisible]="showSelectionDialog()"
+      [groupPolicies]="policies"
+      (policy)="addPolicy($event)"
+    ></app-policy-selection-form>
+  </app-dialog>
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="'¿Eliminar la política ' + policyToDelete?.name + '?'"
+    (onDelete)="onDeleteConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <app-delete-dialog
+    [open]="showUnlinkDialog()"
+    (openChange)="hideUnlinkDialog()"
+    [message]="'¿Desvincular la política ' + policyToUnlink?.name + '?'"
+    [deleteButtonText]="'Desvincular'"
+    (onDelete)="onUnlinkConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <ul class="list-group my-2">
+    @for (policy of policies; track policy.name) {
+      <li class="list-group-item">
+        <app-policy-list-item
+          [groupId]="groupId()"
+          [policy]="policy"
+          [groups]="groups"
+          (onEditPolicy)="editPolicy($event)"
+          (onDeletePolicy)="deletePolicy($event)"
+          (onUnlinkPolicy)="unlinkPolicy($event)"
+        ></app-policy-list-item>
+      </li>
+    }
+  </ul>
+  <footer>
+    <app-paginator
+      (onPageChange)="loadPaginatedPolicies($event)"
+    ></app-paginator>
+  </footer>
+</main>

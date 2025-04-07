@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./assets/scss/app.scss";
+
+form {
+  label,
+  div {
+    width: 100%;
+  }
+
+  div.d-flex {
+    align-items: normal;
+  }
+
+  > button {
+    width: 100%;
+  }
+}

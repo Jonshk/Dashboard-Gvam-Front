@@ -1,0 +1,40 @@
+<div class="d-flex align-items-center justify-content-between">
+  <span class="w-20">
+    {{ group().groupName }}
+  </span>
+  <div class="d-flex gap-2 flex-wrap justify-content-center">
+    <a
+      class="btn btn-light btn-sm"
+      [routerLink]="[group().groupId, 'policies']"
+    >
+      Ver políticas</a
+    >
+    <a class="btn btn-light btn-sm" [routerLink]="[group().groupId, 'devices']"
+      >Ver dispositivos
+      @if (numberOfDevices > 0) {
+        ({{ numberOfDevices }})
+      }
+    </a>
+    <a
+      class="btn btn-light btn-sm"
+      [routerLink]="[group().groupId, 'geofences']"
+      >Ver geovallas</a
+    >
+  </div>
+  <div class="d-flex gap-2 flex-wrap justify-content-center">
+    <button
+      class="btn btn-light btn-sm"
+      (click)="editGroup()"
+      [disabled]="loadingService.isLoading()"
+    >
+      Editar
+    </button>
+    <button
+      class="btn btn-danger btn-sm"
+      (click)="deleteGroup()"
+      [disabled]="loadingService.isLoading()"
+    >
+      Eliminar
+    </button>
+  </div>
+</div>
