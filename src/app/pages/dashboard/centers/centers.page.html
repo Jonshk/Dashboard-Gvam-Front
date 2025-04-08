@@ -1,0 +1,36 @@
+<div class="centers-page">
+  <h1>CENTROS</h1>
+  
+  <!-- Buscador -->
+  <div class="search-container">
+    <input type="text" placeholder="Buscar centro..." (input)="onFilterChange($event)" />
+  </div>
+  
+  <!-- Tabla de Centros -->
+  <table class="centers-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Centro</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let center of filteredCenters">
+        <td>{{ center.id }}</td>
+        <td>{{ center.center }}</td>
+        <td>{{ center.phoneNumber }}</td>
+        <td>
+          <button (click)="editCenter(center)">Editar</button>
+          <button (click)="deleteCenter(center)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Botón para agregar un nuevo centro -->
+  <div class="action-buttons">
+    <button (click)="addCenter()">Agregar Centro</button>
+  </div>
+</div>
