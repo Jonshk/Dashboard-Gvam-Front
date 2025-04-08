@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { EnterpriseService } from '../services/enterprise/enterprise.service';
 import { StoreService } from '../services/store/store.service';
 import { Role } from '../enums/role';
 

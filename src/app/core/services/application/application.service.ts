@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import { Response } from '../../models/response/response.model';
 import { CreateApplication } from '../../models/response/create-application';
 import { Observable } from 'rxjs';
@@ -18,9 +17,7 @@ export class ApplicationService {
 
   constructor(
     private http: HttpClient,
-    private enterpriseService: EnterpriseService,
   ) {
-    this.enterpriseId = this.enterpriseService.getEnterpriseId() as string;
   }
 
   createApplicationToken(): Observable<Response<CreateApplication>> {

@@ -4,7 +4,6 @@ import { environment } from '../../../../environments/environment';
 import { Response } from '../../models/response/response.model';
 import { Policy } from '../../models/response/policy.model';
 import { Observable } from 'rxjs';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import { SuccessResponse } from '../../models/response/success-response.model';
 import {
   getPaginationParams,
@@ -28,9 +27,7 @@ export class PolicyService {
 
   constructor(
     private http: HttpClient,
-    private enterpriseService: EnterpriseService,
   ) {
-    this.enterpriseId = this.enterpriseService.getEnterpriseId() as string;
   }
 
   create(groupId: number, policy: Policy): Observable<Response<Policy>> {

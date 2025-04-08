@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import { environment } from '../../../../environments/environment';
 import { SuccessResponse } from '../../models/response/success-response.model';
 import { Response } from '../../models/response/response.model';
@@ -25,9 +24,7 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private enterpriseService: EnterpriseService,
   ) {
-    this.enterpriseId = this.enterpriseService.getEnterpriseId() as string;
   }
 
   create(

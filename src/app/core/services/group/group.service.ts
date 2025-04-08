@@ -6,7 +6,6 @@ import { environment } from '../../../../environments/environment';
 import { Group } from '../../models/response/group.model';
 import { Observable } from 'rxjs';
 import { SuccessResponse } from '../../models/response/success-response.model';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import {
   getPaginationParams,
   NO_PAGINATION,
@@ -25,9 +24,7 @@ export class GroupService {
 
   constructor(
     private http: HttpClient,
-    private enterpriseService: EnterpriseService,
   ) {
-    this.enterpriseId = this.enterpriseService.getEnterpriseId() as string;
   }
 
   create(createGroup: CreateGroup): Observable<Response<Group>> {

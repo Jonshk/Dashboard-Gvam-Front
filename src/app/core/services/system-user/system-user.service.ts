@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { SuccessResponse } from '../../models/response/success-response.model';
-import { EnterpriseService } from '../enterprise/enterprise.service';
 import { Response } from '../../models/response/response.model';
 import { CreateSystemUserRequest } from '../../models/request/create-system-user-request.model';
 import { SystemUser } from '../../models/response/system-user.model';
@@ -24,9 +23,7 @@ export class SystemUserService {
 
   constructor(
     private http: HttpClient,
-    private enterpriseService: EnterpriseService,
   ) {
-    this.enterpriseId = this.enterpriseService.getEnterpriseId() as string;
   }
 
   create(

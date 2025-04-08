@@ -10,7 +10,6 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { StoreService } from '../../../core/services/store/store.service';
 import { LoginResponse } from '../../../core/models/response/login-response.model';
 import { Response } from '../../../core/models/response/response.model';
-import { EnterpriseService } from '../../../core/services/enterprise/enterprise.service';
 import { Router, RouterModule } from '@angular/router';
 import { LoadingService } from '../../../core/services/loading/loading.service';
 import { CustomValidators } from '../../../shared/util/custom-validators';
@@ -36,7 +35,6 @@ export class RegisterPage {
   constructor(
     private authService: AuthService,
     private storeService: StoreService,
-    private enterpriseService: EnterpriseService,
     private router: Router,
     private loadingService: LoadingService,
   ) {}
@@ -57,7 +55,6 @@ export class RegisterPage {
         this.storeService.save('email', data.email);
         this.authService.saveTokens(data.tokens);
 
-        this.enterpriseService.setEnterpriseId(false);
         this.router.navigate(['/enterprises'], { replaceUrl: true });
         this.loadingService.dismissLoading();
       },

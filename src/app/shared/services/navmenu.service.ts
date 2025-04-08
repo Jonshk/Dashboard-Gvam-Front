@@ -27,21 +27,7 @@ export class NavmenuService {
   public isShow: boolean = false;
   public closeSidebar: boolean = false;
 
-  constructor(private storeService: StoreService) {
-    const role = this.storeService.get('role');
-    if (role === Role.ADMIN) {
-      this.MENUITEMS.push({
-        level: 1,
-        id: 6,
-        path: '/system-users',
-        bookmark: true,
-        title: 'Usuarios del sistema',
-        icon: 'user',
-        type: 'link',
-      });
-    }
-  }
-
+  // Definición actualizada del menú según las especificaciones:
   MENUITEMS: Menu[] = [
     {
       headTitle1: 'General',
@@ -49,49 +35,63 @@ export class NavmenuService {
     {
       level: 1,
       id: 1,
-      path: '/groups',
+      path: '/products', // Cambiado de '/groups' a '/products'
       bookmark: true,
-      title: 'Grupos',
-      icon: 'home',
+      title: 'PRODUCTOS', // Nuevo título
+      icon: 'inventory',  // Asegúrate de tener este ícono definido
       type: 'link',
     },
     {
       level: 1,
       id: 2,
-      path: '/applications',
+      path: '/centers', // Ruta para centros
       bookmark: true,
-      title: 'Aplicaciones',
-      icon: 'file',
+      title: 'CENTROS', // Nuevo título
+      icon: 'centers',  // Ícono actualizado (asegúrate de que exista)
       type: 'link',
     },
     {
       level: 1,
       id: 3,
-      path: '/users',
+      path: '/orders', // Ruta para pedidos
       bookmark: true,
-      title: 'Usuarios',
-      icon: 'user',
+      title: 'PEDIDOS', // Nuevo título (en lugar de ENVIOS)
+      icon: 'shipping', // Ícono actualizado
       type: 'link',
     },
     {
       level: 1,
       id: 4,
-      path: '/policies',
+      path: '/repairs', // Ruta para reparaciones
       bookmark: true,
-      title: 'Politicas',
-      icon: 'chat',
+      title: 'REPARACIONES', // Nuevo título
+      icon: 'repairs', // Ícono actualizado
       type: 'link',
     },
     {
       level: 1,
       id: 5,
-      path: '/devices',
+      path: '/receptions', // Ruta para recepciones
       bookmark: true,
-      title: 'Dispositivos',
-      icon: 'others',
+      title: 'RECEPCIONES', // Nuevo título
+      icon: 'receptions', // Ícono actualizado
+      type: 'link',
+    },
+    {
+      level: 1,
+      id: 6,
+      path: '/reports', // Ruta para reportes
+      bookmark: true,
+      title: 'REPORTES', // Nuevo título
+      icon: 'reports',  // Ícono actualizado
       type: 'link',
     },
   ];
 
   item = new BehaviorSubject<Menu[]>(this.MENUITEMS);
+
+  constructor(private storeService: StoreService) {
+    // Se eliminó la condición que agregaba "Usuarios del sistema" para rol ADMIN,
+    // ya que en tus especificaciones el menú queda definido con los 6 items mencionados.
+  }
 }

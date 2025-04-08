@@ -1,0 +1,47 @@
+<div class="stock-page">
+  <h1>STOCK</h1>
+  
+  <!-- Pestañas para seleccionar la categoría: Consumibles o Dispositivos -->
+  <div class="tabs">
+    <button [class.active]="selectedTab === 'consumible'" (click)="setTab('consumible')">CONSUMIBLES</button>
+    <button [class.active]="selectedTab === 'dispositivo'" (click)="setTab('dispositivo')">DISPOSITIVOS</button>
+  </div>
+  
+  <!-- Buscador para filtrar productos -->
+  <div class="search-container">
+    <input type="text" placeholder="Buscar producto..." (input)="onFilterChange($event)" />
+  </div>
+  
+  <!-- Tabla de Stock -->
+  <table class="stock-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>PRODUCTO</th>
+        <th>CANTIDAD</th>
+        <th>PRECIO</th>
+        <th *ngIf="selectedTab === 'dispositivo'">ESTADO</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filteredItems">
+        <td>{{ item.id }}</td>
+        <td>{{ item.productName }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price | currency }}</td>
+        <td *ngIf="selectedTab === 'dispositivo'">{{ item.status || 'N/A' }}</td>
+        <td>
+          <button (click)="editProduct(item)">Editar</button>
+          <button (click)="deleteProduct(item)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Botonera de Acciones -->
+  <div class="action-buttons">
+    <button (click)="addProduct()">Agregar Producto</button>
+    <button (click)="importExcel()">Importar Excel</button>
+  </div>
+</div>

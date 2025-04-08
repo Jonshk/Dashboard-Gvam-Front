@@ -2,126 +2,68 @@ import { Routes } from '@angular/router';
 import { isLoggedGuard } from '../../core/guards/auth.guard';
 import { hasEnterpriseGuard } from '../../core/guards/has-enterprise.guard';
 import { isAdminGuard } from '../../core/guards/is-admin-guard';
-import { isIdNumberGuard } from '../../core/guards/is-id-number.guard';
-import { ApplicationsPage } from './applications/applications.page';
-import { DeviceDetailPage } from './device-detail/device-detail.page';
-import { DevicesPage } from './devices/devices.page';
-import { EnterprisePage } from './enterprise/enterprise.page';
-import { GeofencesPages } from './geofences/geofences.pages';
-import { GroupsPage } from './groups/groups.page';
-import { PoliciesPage } from './policies/policies.page';
-import { SystemUsersPage } from './system-users/system-users.page';
-import { UsersPage } from './users/users.page';
+
+// Elimina la importación de ProductsPage si no la vas a utilizar
+// import { ProductsPage } from './products/products.page';
+import { StockPage } from './stock/stock.page';
+import { CentersPage } from './centers/centers.page';
+import { OrdersPage } from './orders/orders.page';
+import { RepairsPage } from './repairs/repairs.page';
+import { ReceptionsPage } from './receptions/receptions.page';
+import { ReportsPage } from './reports/reports.page';
 
 export const dashboardRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'groups',
-    pathMatch: 'full',
+    redirectTo: 'stock',
+    pathMatch: 'full'
   },
   {
-    path: 'enterprises',
+    path: 'stock',
     data: {
-      title: 'Empresas',
+      title: 'STOCK'
     },
-    component: EnterprisePage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard, isAdminGuard],
+    component: StockPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {
-    path: 'groups',
+    path: 'centers',
     data: {
-      title: 'Grupos',
+      title: 'CENTROS'
     },
-    component: GroupsPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
+    component: CentersPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {
-    path: 'applications',
+    path: 'orders',
     data: {
-      title: 'Aplicaciones',
+      title: 'PEDIDOS'
     },
-    component: ApplicationsPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
+    component: OrdersPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {
-    path: 'users',
+    path: 'repairs',
     data: {
-      title: 'Usuarios',
+      title: 'REPARACIONES'
     },
-    component: UsersPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
+    component: RepairsPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {
-    path: 'policies',
+    path: 'receptions',
     data: {
-      title: 'Politicas',
+      title: 'RECEPCIONES'
     },
-    component: PoliciesPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
+    component: ReceptionsPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {
-    path: 'devices',
+    path: 'reports',
     data: {
-      title: 'Dispositivos',
+      title: 'REPORTES'
     },
-    component: DevicesPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
-  },
-  {
-    path: 'devices/:deviceId',
-    data: {
-      title: 'Detalle del dispositivo',
-      breadcrumb: 'Detalle del dispositivo',
-    },
-    component: DeviceDetailPage,
-    canMatch: [isIdNumberGuard(1)],
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
-  },
-  {
-    path: 'system-users',
-    data: {
-      title: 'Usuarios del sistema',
-    },
-    component: SystemUsersPage,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard, isAdminGuard],
-  },
-  {
-    path: 'groups/:groupId/devices',
-    data: {
-      title: 'Dispositivos',
-      breadcrumb: 'Dispositivos',
-    },
-    component: DevicesPage,
-    canMatch: [isIdNumberGuard(1)],
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
-  },
-  {
-    path: 'groups/:groupId/devices/:deviceId',
-    data: {
-      title: 'Detalle del dispositivo',
-      breadcrumb: 'Detalle del dispositivo',
-    },
-    component: DeviceDetailPage,
-    canMatch: [isIdNumberGuard(1), isIdNumberGuard(3)],
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
-  },
-  {
-    path: 'groups/:groupId/policies',
-    data: {
-      title: 'Políticas',
-      breadcrumb: 'Políticas',
-    },
-    component: PoliciesPage,
-    canMatch: [isIdNumberGuard(1)],
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
-  },
-  {
-    path: 'groups/:groupId/geofences',
-    data: {
-      title: 'Geovallas',
-      breadcrumb: 'Geovallas',
-    },
-    component: GeofencesPages,
-    canActivate: [isLoggedGuard, hasEnterpriseGuard],
+    component: ReportsPage,
+    canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
 ];
