@@ -1,0 +1,40 @@
+<div class="header-wrapper row m-0">
+  <div class="header-logo-wrapper col-auto p-0">
+    <div class="logo-wrapper">
+      <a [routerLink]="['/dashboard/default']">
+        <img
+          class="img-fluid for-light"
+          src="assets/images/logo/logo_dark.png"
+          alt="logo-light"
+        />
+        <img
+          class="img-fluid for-dark"
+          src="assets/images/logo/logo.png"
+          alt="logo-dark"
+        />
+      </a>
+    </div>
+    <div class="toggle-sidebar" (click)="openMenu()">
+      <i
+        class="status_toggle middle sidebar-toggle"
+        data-feather="align-center"
+      ></i>
+    </div>
+  </div>
+  <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
+    <div>
+      <a class="toggle-sidebar" href="javascript:void(0)">
+        <i class="iconly-Category icli"> </i>
+      </a>
+    </div>
+  </div>
+  <div
+    class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto"
+  >
+    <ul class="nav-menus" (clickOutside)="clickOutside()">
+      <li class="profile-nav onhover-dropdown">
+        <app-profile></app-profile>
+      </li>
+    </ul>
+  </div>
+</div>

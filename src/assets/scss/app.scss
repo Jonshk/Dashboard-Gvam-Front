@@ -1,0 +1,42 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+// // //rating scss //
+
+@import"../../../node_modules/ngx-bar-rating/themes/br-default-theme.scss";
+@import"../../../node_modules/ngx-bar-rating/themes/br-horizontal-theme.scss";
+@import"../../../node_modules/ngx-bar-rating/themes/br-movie-theme.scss";
+@import"../../../node_modules/ngx-bar-rating/themes/br-square-theme.scss";
+@import"../../../node_modules/ngx-bar-rating/themes/br-stars-theme.scss";
+@import"../../../node_modules/ngx-bar-rating/themes/br-vertical-theme.scss";
+
+
+@import"../../../node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.theme.default.scss";
+@import "../../../node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.carousel.scss";
+
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../node_modules/flatpickr/dist/flatpickr.css";
+
+@import '../node_modules/@angular/cdk/overlay-prebuilt.css';
+
+@import "chartist/chartist-settings";
+@import "chartist/chartist";
+
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+@import "./vendors/todo.scss";
+
+
+@import "leaflet/dist/leaflet.css";
+
+@import "./flag-icon";
+@import "./fontawesome.scss";
+@import "./icofont.scss";
+@import "./whether-icon.scss"; 
+@import "./feather-icon.scss";
+@import"./themify.scss";
+
+
+// style scss//
+@import "../scss/style.scss";
+@import "./themes/responsive";
+

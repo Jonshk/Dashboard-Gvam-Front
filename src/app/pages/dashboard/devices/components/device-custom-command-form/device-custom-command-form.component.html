@@ -1,0 +1,81 @@
+<form
+  class="d-flex flex-column gap-2"
+  [formGroup]="customCommandForm"
+  (ngSubmit)="sendCustomCommandForm()"
+>
+  <label class="w-100 mb-2">
+    Ajuste
+    <select class="form-select" name="command" formControlName="command">
+      @for (
+        deviceCustomCommand of deviceCustomCommandKeys;
+        track deviceCustomCommand
+      ) {
+        <option [value]="DeviceCustomCommand[deviceCustomCommand]">
+          {{ DeviceCustomCommandDescription[deviceCustomCommand] }}
+        </option>
+      }
+    </select>
+  </label>
+
+  @switch (customCommandForm.value.command) {
+    @case (DeviceCustomCommand.ADJUST_VOLUME) {
+      <label class="w-100">
+        Nivel de volumen: {{ customCommandForm.value.value }}
+        <input
+          type="range"
+          name="value"
+          formControlName="value"
+          class="form-range"
+          min="0"
+          max="100"
+        />
+      </label>
+    }
+    @case (DeviceCustomCommand.ACTIVATE_GEOFENCE) {
+      <label class="w-100">
+        Geovalla
+        <select class="form-select" name="value" formControlName="value">
+          @for (geofence of groupGeofences(); track geofence.geofenceId) {
+            <option [value]="geofence.geofenceId">
+              {{ geofence.geofenceName }}
+            </option>
+          }
+        </select>
+      </label>
+    }
+    @case (DeviceCustomCommand.DEACTIVATE_GEOFENCE) {
+      <small class="w-100">
+        @if (device()?.geofenceId) {
+          La geovalla {{ getActiveGeofenceName() }} está activa
+        } @else {
+          No hay ninguna geovalla activa
+        }
+      </small>
+    }
+    @case (
+      DeviceCustomCommand.ACTIVATE_REMOTE_CONTROL ||
+      DeviceCustomCommand.DEACTIVATE_GEOFENCE
+    ) {
+      <small class="w-100">
+        @if (device()?.remoteControlActive) {
+          El control remoto está activo
+        } @else {
+          El control remoto no está activo
+        }
+      </small>
+    }
+  }
+
+  <small
+    >Para que estos ajustes sean aplicados, es necesario que el agente del
+    dispositivo esté configurado
+  </small>
+
+  <button
+    class="btn btn-primary w-100 mt-2"
+    type="submit"
+    [disabled]="customCommandForm.invalid || loadingService.isLoading()"
+  >
+    Cambiar ajuste
+  </button>
+</form>
