@@ -1,0 +1,46 @@
+<div class="repairs-page">
+    
+    <!-- Buscador -->
+    <div class="search-container">
+      <input type="text" placeholder="Buscar reparación..." (input)="onFilterChange($event)" />
+    </div>
+    
+    <!-- Tabla de Reparaciones -->
+    <table class="repairs-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Dispositivo</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let repair of repairs">
+          <td>{{ repair.id }}</td>
+          <td>{{ repair.device }}</td>
+          <td>{{ repair.description }}</td>
+          <td>{{ repair.status }}</td>
+          <td>{{ repair.date }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="editRepair(repair)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteRepair(repair)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Botón para agregar una nueva reparación -->
+    <div class="action-buttons text-center">
+      <button class="btn btn-primary" (click)="addRepair()">
+        <i class="bi bi-plus-circle"></i> Agregar Reparación
+      </button>
+    </div>
+  </div>
+  

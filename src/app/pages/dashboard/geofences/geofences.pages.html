@@ -1,0 +1,39 @@
+<main class="container-fluid">
+  <button class="btn btn-primary me-2" (click)="createMode()">
+    Crear nueva geovalla
+  </button>
+
+  <app-dialog [open]="showFormDialog()" (openChange)="hideFormDialog()">
+    <app-geofence-form
+      [groupId]="groupId()"
+      [isVisible]="showFormDialog()"
+      [editGeofence]="geofenceToEdit"
+      (geofence)="addGeofence($event)"
+    ></app-geofence-form>
+  </app-dialog>
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="'¿Eliminar la geovalla ' + geofenceToDelete?.geofenceName + '?'"
+    (onDelete)="onDeleteConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <ul class="list-group my-2">
+    @for (geofence of geofences; track geofence.geofenceId) {
+      <li class="list-group-item">
+        <app-geofence-list-item
+          [geofence]="geofence"
+          (onEditGeofence)="editGeofence($event)"
+          (onDeleteGeofence)="deleteGeofence($event)"
+        ></app-geofence-list-item>
+      </li>
+    }
+  </ul>
+  <footer>
+    <app-paginator
+      (onPageChange)="loadPaginatedGeofences($event)"
+    ></app-paginator>
+  </footer>
+</main>

@@ -1,0 +1,95 @@
+<!-- stock-page.component.html -->
+
+<!-- Botones para seleccionar la pestaña -->
+<div class="button-group" style="margin-bottom: 1rem;">
+  <button pButton type="button" label="Insumos"
+          (click)="setActiveTab('insumos')"
+          [ngClass]="{'active': activeTab==='insumos'}"></button>
+  <button pButton type="button" label="Repuestos"
+          (click)="setActiveTab('repuestos')"
+          [ngClass]="{'active': activeTab==='repuestos'}"></button>
+  <button pButton type="button" label="Dispositivos"
+          (click)="setActiveTab('dispositivos')"
+          [ngClass]="{'active': activeTab==='dispositivos'}"></button>
+</div>
+
+<!-- Tabla para Insumos -->
+<div *ngIf="activeTab === 'insumos'">
+  <p-table [value]="insumos" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-element>
+      <tr>
+        <td>{{ element.id }}</td>
+        <td>{{ element.name }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-eye" class="p-button-rounded p-button-info" 
+                  (click)="openSubcategoriesModal(element)"></button>
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning" 
+                  (click)="editMainCategory(element)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" 
+                  (click)="deleteMainCategory(element)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Tabla para Repuestos -->
+<div *ngIf="activeTab === 'repuestos'">
+  <p-table [value]="repuestos" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-element>
+      <tr>
+        <td>{{ element.id }}</td>
+        <td>{{ element.name }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-eye" class="p-button-rounded p-button-info" 
+                  (click)="openSubcategoriesModal(element)"></button>
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning" 
+                  (click)="editMainCategory(element)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" 
+                  (click)="deleteMainCategory(element)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Tabla para Dispositivos -->
+<div *ngIf="activeTab === 'dispositivos'">
+  <p-table [value]="dispositivos" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-element>
+      <tr>
+        <td>{{ element.id }}</td>
+        <td>{{ element.name }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-eye" class="p-button-rounded p-button-info" 
+                  (click)="openSubcategoriesModal(element)"></button>
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning" 
+                  (click)="editMainCategory(element)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" 
+                  (click)="deleteMainCategory(element)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

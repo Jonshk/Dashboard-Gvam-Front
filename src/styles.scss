@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "./assets/scss/app.scss";
+@import 'primeng/resources/themes/saga-blue/theme.css';  // O el tema de tu preferencia
+@import 'primeng/resources/primeng.min.css';
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+
+
+html, body
+ { height: 100%; }
+
+body 
+{ margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+form {
+  label,
+  div {
+    width: 100%;
+  }
+
+  div.d-flex {
+    align-items: normal;
+  }
+
+  > button {
+    width: 100%;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

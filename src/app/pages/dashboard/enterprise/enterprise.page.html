@@ -1,0 +1,43 @@
+<main class="container-fluid">
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="loadingService.isLoading()"
+    (click)="signUp()"
+  >
+    Registrar empresa
+  </button>
+  @if (signUpUrl.length > 0) {
+    <p>
+      Visita la siguiente url para registrar una empresa
+      <a [href]="signUpUrl" target="_blank" rel="noopener noreferrer">{{
+        signUpUrl
+      }}</a>
+    </p>
+
+    <form
+      class="d-flex flex-column"
+      [formGroup]="enterpriseRegisterForm"
+      (ngSubmit)="createEnterprise()"
+    >
+      <label>
+        Introduce aquí el token de respuesta:
+        <input
+          type="text"
+          class="form-control"
+          name="token"
+          formControlName="token"
+        />
+      </label>
+      <button
+        type="submit"
+        class="btn btn-primary mt-2"
+        [disabled]="
+          enterpriseRegisterForm.invalid || loadingService.isLoading()
+        "
+      >
+        Registrar
+      </button>
+    </form>
+  }
+</main>

@@ -1,0 +1,48 @@
+<div class="orders-page">
+    
+    <!-- Buscador -->
+    <div class="search-container">
+      <input type="text" placeholder="Buscar pedido..." (input)="onFilterChange($event)" />
+    </div>
+    
+    <!-- Tabla de Pedidos -->
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Número de Pedido</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.orderNumber }}</td>
+          <td>{{ order.client }}</td>
+          <td>{{ order.total | currency }}</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.date }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="editOrder(order)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteOrder(order)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Botón para agregar un nuevo pedido -->
+    <div class="action-buttons text-center">
+      <button class="btn btn-primary" (click)="addOrder()">
+        <i class="bi bi-plus-circle"></i> Agregar Pedido
+      </button>
+    </div>
+  </div>
+  

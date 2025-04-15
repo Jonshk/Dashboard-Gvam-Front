@@ -1,0 +1,17 @@
+@if (open()) {
+  <div
+    class="dialog-container d-flex flex-column justify-content-center align-items-center"
+  >
+    <dialog open>
+      <div class="header">
+        <button
+          type="button"
+          class="btn-close"
+          (click)="onDismiss()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <ng-content></ng-content>
+    </dialog>
+  </div>
+}

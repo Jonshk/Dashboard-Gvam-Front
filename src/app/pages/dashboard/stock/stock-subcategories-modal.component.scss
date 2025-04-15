@@ -1,0 +1,95 @@
+// src/app/pages/dashboard/stock/stock-subcategories-modal.component.scss
+.modal-container {
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+  
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h2 { margin: 0; }
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+    }
+  
+    .modal-body {
+      margin-top: 15px;
+    }
+  
+    .subcategories-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+  
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th { background-color: #f39c12; color: #fff; }
+    }
+  
+    form {
+      .form-group {
+        margin-bottom: 10px;
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 6px; }
+      }
+      .modal-footer {
+        text-align: center;
+        button { padding: 10px 20px; }
+      }
+    }
+  }
+  /* src/app/pages/dashboard/stock/stock-subcategories-modal.component.scss */
+mat-dialog-content {
+    .mat-elevation-z8 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f39c12;
+      color: #fff;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    button {
+      margin: 0 10px;
+    }
+  }
+  .toolbar-title {
+    flex: 1 1 auto;
+  }
+  
+  .tab-content {
+    padding: 20px;
+  }
+  
+  mat-table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  mat-icon {
+    font-size: 24px;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
