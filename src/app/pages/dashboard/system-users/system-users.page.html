@@ -1,0 +1,36 @@
+<main class="container-fluid">
+  <button class="btn btn-primary" (click)="createMode()">
+    Crear nuevo usuario de sistema
+  </button>
+
+  <app-dialog [open]="showDialog()" (openChange)="hideDialog()">
+    <app-system-users-form
+      [isVisible]="showDialog()"
+      [editUser]="userToEdit"
+      (user)="addUser($event)"
+    >
+    </app-system-users-form>
+  </app-dialog>
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="'¿Eliminar el usuario ' + userToDelete?.name + '?'"
+    (onDelete)="onDeleteConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <ul class="list-group my-2">
+    @for (user of users; track user.userId) {
+      <li class="list-group-item">
+        <app-system-users-list-item
+          [user]="user"
+          (onEditUser)="editUser($event)"
+          (onDeleteUser)="deleteUser($event)"
+        ></app-system-users-list-item>
+      </li>
+    }
+  </ul>
+
+  <app-paginator (onPageChange)="list()"></app-paginator>
+</main>

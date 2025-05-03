@@ -1,0 +1,53 @@
+@if (device) {
+  <main class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <p>Nombre: {{ device.deviceName }}</p>
+        <p>Pin de registro en app: {{ device.pin }}</p>
+
+        @if (device.deviceManufacturer) {
+          <p>Marca del dispositivo: {{ device.deviceManufacturer }}</p>
+        }
+
+        @if (device.deviceModel) {
+          <p>Modelo del dispositivo: {{ device.deviceModel }}</p>
+        }
+
+        @if (device.androidVersion) {
+          <p>Version de android: {{ device.androidVersion }}</p>
+        }
+
+        @if (device.batteryLevel) {
+          <p>Nivel de batería: {{ device.batteryLevel }}</p>
+        }
+
+        @if (device.policyName) {
+          <p>Política aplicada: {{ device.policyName }}</p>
+        }
+
+        @if (device.serialNumber) {
+          <p>Número de serie: {{ device.serialNumber }}</p>
+        }
+        @if (device.imei) {
+          <p>IMEI: {{ device.imei }}</p>
+        }
+        @if (device.mac) {
+          <p>Dirección MAC: {{ device.mac }}</p>
+        }
+
+        @if (device.location) {
+          <p>Ubicación: {{ device.location }}</p>
+        }
+
+        @if (device.installedApps && device.installedApps.length > 0) {
+          <p>Aplicaciones instaladas ({{ device.installedApps.length }}):</p>
+          <ul class="app-list">
+            @for (installedApp of device.installedApps; track installedApp) {
+              <li>{{ installedApp }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  </main>
+}

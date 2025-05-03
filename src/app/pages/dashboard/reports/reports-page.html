@@ -1,0 +1,41 @@
+<div class="reports-page">
+    
+    <!-- Buscador -->
+    <div class="search-container">
+      <input type="text" placeholder="Buscar reporte..." (input)="onFilterChange($event)" />
+    </div>
+    
+    <!-- Tabla de Reportes -->
+    <table class="reports-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Fecha</th>
+          <th>Resumen</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.id }}</td>
+          <td>{{ report.title }}</td>
+          <td>{{ report.date }}</td>
+          <td>{{ report.summary }}</td>
+          <td>
+            <button class="btn btn-info btn-sm" (click)="viewReport(report)">
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Botón para generar reporte -->
+    <div class="action-buttons text-center">
+      <button class="btn btn-success" (click)="generateReport()">
+        <i class="bi bi-file-earmark-text"></i> Generar Reporte
+      </button>
+    </div>
+  </div>
+  

@@ -1,0 +1,57 @@
+<div class="stock-page">
+    <h2>Inventario</h2>
+  
+    <!-- Aquí el acordeón con las categorías -->
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let group of stockGroups">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ group.category }}
+          </mat-panel-title>
+          <mat-panel-description>
+            ({{ group.items.length }} items)
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of group.items">
+              <td>{{ item.id }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price | currency }}</td>
+              <td>
+                <button mat-icon-button color="primary" (click)="openProductModal(item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteProduct(item)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="panel-footer">
+          <button mat-button (click)="openCategoryDetail(group.category)">
+            Ver detalles de {{ group.category }}
+          </button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  
+    <!-- Botón al final del contenido -->
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="openProductModal()">
+        Agregar Producto
+      </button>
+    </div>
+  </div>
+  

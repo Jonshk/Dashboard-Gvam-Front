@@ -1,0 +1,15 @@
+export enum DeviceCustomCommand {
+  ADJUST_VOLUME = 'ADJUST_VOLUME',
+  ACTIVATE_GEOFENCE = 'ACTIVATE_GEOFENCE',
+  DEACTIVATE_GEOFENCE = 'DEACTIVATE_GEOFENCE',
+  ACTIVATE_REMOTE_CONTROL = 'ACTIVATE_REMOTE_CONTROL',
+  DEACTIVATE_REMOTE_CONTROL = 'DEACTIVATE_REMOTE_CONTROL',
+}
+
+export enum DeviceCustomCommandDescription {
+  ADJUST_VOLUME = 'Ajustar volumen',
+  ACTIVATE_GEOFENCE = 'Activar geovalla',
+  DEACTIVATE_GEOFENCE = 'Desactivar geovalla',
+  ACTIVATE_REMOTE_CONTROL = 'Activar control remoto',
+  DEACTIVATE_REMOTE_CONTROL = 'Desactivar control remoto',
+}

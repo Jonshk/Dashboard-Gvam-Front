@@ -1,0 +1,58 @@
+<div class="stock-page">
+
+  <h2>Inventario</h2>
+
+  <!-- Pestañas al estilo bootstrap -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let tab of tabs">
+      <a
+        class="nav-link"
+        [class.active]="selectedTab === tab"
+        (click)="selectTab(tab)"
+        href="javascript:void(0)"
+      >
+        {{ tab }}
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tabla con el mismo estilo que CentersPage -->
+  <table class="stock-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filteredItems">
+        <td>{{ item.id }}</td>
+        <td>{{ item.productName }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="editProduct(item)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteProduct(item)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredItems.length === 0">
+        <td colspan="5">No hay productos en esta pestaña.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Botón para agregar -->
+  <div class="action-buttons text-center">
+    <button class="btn btn-primary" (click)="addProduct()">
+      <i class="bi bi-plus-circle"></i> Agregar Producto
+    </button>
+  </div>
+
+</div>

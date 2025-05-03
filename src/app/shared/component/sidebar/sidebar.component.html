@@ -1,0 +1,159 @@
+<div class="logo-wrapper">
+  <a [routerLink]="['/']">
+    <img class="img-fluid" src="assets/images/logo/logo.png" alt="Logo" />
+  </a>
+  <div class="back-btn" (click)="openMenu()">
+    <i class="fa fa-angle-left"></i>
+  </div>
+</div>
+
+<div class="logo-icon-wrapper">
+  <a [routerLink]="['/']">
+    <img class="img-fluid" src="assets/images/logo/logo-icon.png" alt="Logo Icon" />
+  </a>
+</div>
+
+<nav class="sidebar-main">
+  <div
+    class="left-arrow"
+    id="left-arrow"
+    [class.d-none]="leftArrowNone"
+    (click)="scrollToLeft()"
+  >
+    <app-feathericon icon="arrow-left"></app-feathericon>
+  </div>
+
+  <div
+    id="sidebar-menu"
+    [ngStyle]="{
+      marginLeft:
+        layout.config.settings.sidebar_type === 'horizontal-wrapper'
+          ? margin + 'px'
+          : '0px'
+    }"
+  >
+    <ul
+      class="sidebar-links theme-scrollbar d-flex flex-column"
+      id="simple-bar"
+    >
+      <!-- Mobile back button -->
+      <li class="back-btn">
+        <a href="javascript:void(0)">
+          <img
+            class="img-fluid"
+            src="assets/images/logo/logo-icon.png"
+            alt="Logo Icon"
+          />
+        </a>
+        <div class="mobile-back text-end">
+          <span>Back</span>
+          <i class="fa fa-angle-right ps-2"></i>
+        </div>
+      </li>
+
+      <!-- Pinned title -->
+      <li class="pin-title sidebar-main-title" [class.show]="pined">
+        <h6>Pinned</h6>
+      </li>
+
+      <!-- Recursive menu -->
+      <ng-template #recursiveMenu let-items>
+        <ng-container *ngFor="let item of items">
+          <li
+            [ngClass]="{
+              'sidebar-list': item.level === 1,
+              'sidebar-main-title': item.headTitle1,
+              'pined': isPined(item.id)
+            }"
+          >
+            <!-- Section header -->
+            <ng-container *ngIf="item.headTitle1">
+              <h6>{{ item.headTitle1 | translate }}</h6>
+            </ng-container>
+
+            <!-- Pin icon for level-1 items -->
+            <i
+              *ngIf="item.level === 1 && !item.headTitle1"
+              class="fa fa-thumb-tack"
+              (click)="togglePined(item.id)"
+            ></i>
+
+            <!-- Link items -->
+            <ng-container *ngIf="item.type !== 'extTabLink' && !item.headTitle1">
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="toggleMenu(item)"
+                [ngClass]="{
+                  'sidebar-link sidebar-title': item.level === 1,
+                  'submenu-title': item.level === 2,
+                  'actived': item.active && item.level === 1
+                }"
+              >
+                <!-- Feather icon -->
+                <app-feathericon
+                  *ngIf="item.icon"
+                  [icon]="item.icon"
+                ></app-feathericon>
+
+                <!-- Title -->
+                <span *ngIf="item.level === 1">
+                  {{ item.title | translate }}
+                </span>
+                <ng-container *ngIf="item.level === 2">
+                  {{ item.title | translate }}
+                </ng-container>
+
+                <!-- Expand/collapse arrow -->
+                <div class="according-menu" *ngIf="item.children">
+                  <i
+                    class="fa"
+                    [ngClass]="
+                      item.active ? 'fa-angle-down pull-right' : 'fa-angle-right pull-right'
+                    "
+                  ></i>
+                </div>
+              </a>
+            </ng-container>
+
+            <!-- External tab link -->
+            <ng-container *ngIf="item.type === 'extTabLink'">
+              <a [href]="item.path">
+                {{ item.title | translate }}
+              </a>
+            </ng-container>
+
+            <!-- Submenu -->
+            <ul
+              *ngIf="item.children"
+              [ngClass]="{
+                'sidebar-submenu': item.level === 1,
+                'nav-sub-childmenu submenu-content': item.level === 2
+              }"
+              [style.display]="item.active ? 'block' : 'none'"
+            >
+              <ng-container
+                *ngTemplateOutlet="recursiveMenu; context: { $implicit: item.children }"
+              ></ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ng-template>
+
+      <!-- Render top-level items -->
+      <ng-container
+        *ngTemplateOutlet="recursiveMenu; context: { $implicit: menuItems }"
+      ></ng-container>
+    </ul>
+  </div>
+
+  <div
+    class="right-arrow"
+    id="right-arrow"
+    [class.d-none]="rightArrowNone"
+    (click)="scrollToRight()"
+  >
+    <app-feathericon icon="arrow-right"></app-feathericon>
+  </div>
+</nav>

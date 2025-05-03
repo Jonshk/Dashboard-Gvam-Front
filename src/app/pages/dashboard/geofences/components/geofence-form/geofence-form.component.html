@@ -1,0 +1,60 @@
+<form
+  class="d-flex flex-column gap-3"
+  [formGroup]="geofenceForm"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    Nombre de la geovalla
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      formControlName="name"
+    />
+  </label>
+
+  <label>
+    Latitud
+    <input
+      type="number"
+      class="form-control"
+      name="latitude"
+      step="0.1"
+      formControlName="latitude"
+    />
+  </label>
+
+  <label>
+    Longitud
+    <input
+      type="number"
+      class="form-control"
+      name="longitude"
+      step="0.1"
+      formControlName="longitude"
+    />
+  </label>
+
+  <label>
+    Radio de actuación (metros)
+    <input
+      type="number"
+      class="form-control"
+      name="radius"
+      step="0.1"
+      formControlName="radius"
+    />
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary mt-2"
+    [disabled]="geofenceForm.invalid || loadingService.isLoading()"
+  >
+    @if (editGeofence()) {
+      Editar geovalla
+    } @else {
+      Crear geovalla
+    }
+  </button>
+</form>

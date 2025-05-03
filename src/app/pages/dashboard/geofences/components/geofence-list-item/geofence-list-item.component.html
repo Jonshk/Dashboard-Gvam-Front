@@ -1,0 +1,20 @@
+<div class="d-flex align-items-center justify-content-between">
+  {{ geofence().geofenceName }}
+
+  <div class="d-flex gap-2 flex-wrap justify-content-center">
+    <button
+      class="btn btn-light btn-sm"
+      (click)="editGeofence()"
+      [disabled]="loadingService.isLoading()"
+    >
+      Editar
+    </button>
+    <button
+      class="btn btn-danger btn-sm"
+      (click)="deleteGeofence()"
+      [disabled]="loadingService.isLoading()"
+    >
+      Eliminar
+    </button>
+  </div>
+</div>

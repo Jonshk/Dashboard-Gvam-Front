@@ -1,0 +1,145 @@
+<td>
+  <div class="checkbox-checked">
+    <input
+      (change)="toggleSelected($event)"
+      type="checkbox"
+      class="form-check-input"
+      name="selected"
+      id="selected"
+      [checked]="device().selected"
+    />
+  </div>
+</td>
+<td>
+  <a
+    class="fw-bold text-underline"
+    [routerLink]="
+      device().groupId
+        ? ['/groups', device().groupId, 'devices', device().deviceId]
+        : [device().deviceId]
+    "
+    >{{ device().deviceName }}</a
+  >
+</td>
+
+@if (!groupId()) {
+  <td>
+    @if (device().groupId) {
+      {{ getGroupName(device().groupId) }}
+    } @else {
+      -
+    }
+  </td>
+}
+
+<td>
+  <div class="d-flex gap-2 justify-content-center align-items-center">
+    @if (device().enrolled) {
+      <button
+        class="btn btn-light btn-sm icon-button"
+        [disabled]="loadingService.isLoading()"
+        (click)="configDevice()"
+      >
+        <app-feathericon icon="settings" />
+      </button>
+    }
+
+    <button
+      class="btn btn-light btn-sm icon-button"
+      [disabled]="loadingService.isLoading()"
+      (click)="editDevice()"
+    >
+      <app-feathericon icon="edit" />
+    </button>
+    <button
+      class="btn btn-danger btn-sm icon-button"
+      [disabled]="loadingService.isLoading()"
+      (click)="deleteDevice()"
+    >
+      <app-feathericon icon="x-circle" />
+    </button>
+  </div>
+</td>
+
+@if (device().enrolled) {
+  <td>
+    @if (device().groupId) {
+      <form
+        class="d-flex gap-2 justify-content-center align-items-center"
+        [formGroup]="applyPolicyForm"
+        (ngSubmit)="applyPolicy()"
+      >
+        <select class="form-select" name="name" formControlName="name">
+          @for (policy of groupPolicies(); track policy.name) {
+            <option [value]="policy.name">
+              {{ policy.name }}
+            </option>
+          }
+        </select>
+        <button
+          class="btn btn-warning btn-sm"
+          type="submit"
+          [disabled]="loadingService.isLoading()"
+        >
+          Aplicar
+        </button>
+      </form>
+    } @else {
+      -
+    }
+  </td>
+  <td>
+    <form
+      class="d-flex gap-2 justify-content-center align-items-center"
+      [formGroup]="sendCommandForm"
+      (ngSubmit)="sendCommand()"
+    >
+      <select class="form-select" name="command" formControlName="command">
+        @for (deviceCommand of deviceCommandKeys; track deviceCommand) {
+          <option [value]="DeviceCommand[deviceCommand]">
+            {{ DeviceCommandDescription[deviceCommand] }}
+          </option>
+        }
+      </select>
+      <button
+        class="btn btn-warning btn-sm"
+        type="submit"
+        [disabled]="loadingService.isLoading()"
+      >
+        Enviar
+      </button>
+    </form>
+  </td>
+  <td>
+    <form
+      class="d-flex gap-2 justify-content-center align-items-center"
+      [formGroup]="migrateForm"
+      (ngSubmit)="migrate()"
+    >
+      <select class="form-select" name="groupId" formControlName="groupId">
+        @for (group of groups(); track group.groupId) {
+          <option [value]="group.groupId">
+            {{ group.groupName }}
+          </option>
+        }
+      </select>
+      <button
+        class="btn btn-warning btn-sm"
+        type="submit"
+        [disabled]="loadingService.isLoading()"
+      >
+        Migrar
+      </button>
+    </form>
+  </td>
+
+  <td>
+    <button
+      class="btn btn-primary"
+      [disabled]="!device().remoteControlActive"
+      (click)="connect()"
+    >
+      Conectar
+    </button>
+  </td>
+}

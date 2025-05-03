@@ -1,0 +1,94 @@
+<main class="container-fluid p-0">
+  <div class="row m-0">
+    <div class="col-12 p-0">
+      <div class="login-card login-dark">
+        <div>
+          <div>
+            <a class="logo text-start" [routerLink]="['/']">
+              <img
+                class="img-fluid for-dark"
+                src="assets/images/logo/logo.png"
+                alt="looginpage"
+              />
+              <img
+                class="img-fluid for-light"
+                src="assets/images/logo/logo_dark.png"
+                alt="looginpage"
+              />
+            </a>
+          </div>
+          <div class="login-main">
+            <form
+              class="theme-form"
+              [formGroup]="registerForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <h4>Crear cuenta</h4>
+              <p>Introduce tus datos para crear una cuenta</p>
+              <div class="form-group">
+                <label class="col-form-label pt-0">Nombre</label>
+                <input
+                  class="form-control"
+                  name="name"
+                  formControlName="name"
+                  placeholder="Nombre"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Email</label>
+                <input
+                  class="form-control"
+                  name="email"
+                  formControlName="email"
+                  placeholder="test@gmail.com"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Contraseña</label>
+                <div class="form-input position-relative">
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="password"
+                    formControlName="password"
+                    placeholder="*********"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Repetir contraseña</label>
+                <div class="form-input position-relative">
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="repeatPassword"
+                    formControlName="repeatPassword"
+                    placeholder="*********"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <button
+                  class="btn btn-primary btn-block w-100"
+                  type="submit"
+                  [disabled]="registerForm.invalid"
+                >
+                  Crear cuenta
+                </button>
+              </div>
+              <p class="mt-4 mb-0">
+                ¿Ya tienes una cuenta?<a class="ms-2" [routerLink]="['/login']"
+                  >Iniciar sesión</a
+                >
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
