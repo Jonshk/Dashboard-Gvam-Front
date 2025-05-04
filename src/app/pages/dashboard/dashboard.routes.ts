@@ -3,7 +3,7 @@ import { isLoggedGuard } from '../../core/guards/auth.guard';
 import { hasEnterpriseGuard } from '../../core/guards/has-enterprise.guard';
 
 import { StockPageComponent } from './stock/stock.page';
-import { CentersPage } from './centers/centers.page';
+import { CentersPageComponent } from './centers/centers.page';
 import { OrdersPage } from './orders/orders.page';
 import { RepairsPage } from './repairs/repairs.page';
 import { ReceptionsPage } from './receptions/receptions.page';
@@ -24,7 +24,7 @@ export const dashboardRoutes: Routes = [
   {
     path: 'centers',
     data: { title: 'CENTROS' },
-    component: CentersPage,
+    component: CentersPageComponent,
     canActivate: [isLoggedGuard, hasEnterpriseGuard]
   },
   {

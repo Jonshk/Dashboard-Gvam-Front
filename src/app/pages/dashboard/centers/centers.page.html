@@ -1,41 +1,83 @@
-<div class="centers-page">
-  
-  <!-- Buscador -->
-  <div class="search-container">
-    <input type="text" placeholder="Buscar centro..." (input)="onFilterChange($event)" />
-  </div>
-  
-  <!-- Tabla de Centros -->
-  <table class="centers-table">
+<!-- src/app/pages/dashboard/centers/centers.page.html -->
+<div class="stock-page">
+  <h2>Centros</h2>
+
+  <table class="table stock-table">
     <thead>
       <tr>
-        <th>ID</th>
+        <th style="width:5%;">#</th>
         <th>Centro</th>
         <th>Teléfono</th>
-        <th>Acciones</th>
+        <th class="text-end" style="width:15%;">Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let center of filteredCenters">
-        <td>{{ center.id }}</td>
-        <td>{{ center.center }}</td>
-        <td>{{ center.phoneNumber }}</td>
-        <td>
-          <button class="btn btn-primary btn-sm" (click)="editCenter(center)">
-            <i class="bi bi-pencil"></i>
+      <tr *ngFor="let c of centers; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ c.center }}</td>
+        <td>{{ c.phonenumber }}</td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary me-2"
+                  (click)="openEdit(c)">
+            <i class="bi bi-pencil-fill"></i>
           </button>
-          <button class="btn btn-danger btn-sm" (click)="deleteCenter(center)">
-            <i class="bi bi-trash"></i>
+          <button class="btn btn-sm btn-outline-danger"
+                  (click)="delete(c)">
+            <i class="bi bi-trash-fill"></i>
           </button>
+        </td>
+      </tr>
+      <tr *ngIf="centers.length === 0">
+        <td colspan="4" class="text-center py-4 text-muted">
+          No hay centros registrados.
         </td>
       </tr>
     </tbody>
   </table>
-  
-  <!-- Botón para agregar un nuevo centro -->
-  <div class="action-buttons text-center">
-    <button class="btn btn-primary" (click)="addCenter()">
-      <i class="bi bi-plus-circle"></i> Agregar Centro
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="openAdd()">
+      <i class="bi bi-plus-circle me-1"></i> Agregar Centro
     </button>
   </div>
+
+  <!-- Modal para Agregar / Editar -->
+  <ng-template #centerModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ modalTitle }}</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" autocomplete="off">
+        <div class="mb-3">
+          <label class="form-label">Nombre del Centro</label>
+          <input formControlName="center"
+                 class="form-control"
+                 [class.is-invalid]="
+                   form.controls['center'].invalid &&
+                   form.controls['center'].touched
+                 ">
+          <div class="invalid-feedback">El nombre es obligatorio.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Teléfono</label>
+          <input formControlName="phonenumber"
+                 class="form-control"
+                 [class.is-invalid]="
+                   form.controls['phonenumber'].invalid &&
+                   form.controls['phonenumber'].touched
+                 ">
+          <div class="invalid-feedback">El teléfono es obligatorio.</div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+      <button class="btn btn-primary"
+              [disabled]="form.invalid"
+              (click)="save()">
+        Guardar
+      </button>
+    </div>
+  </ng-template>
 </div>
