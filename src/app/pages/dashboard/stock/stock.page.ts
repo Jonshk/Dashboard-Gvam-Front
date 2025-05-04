@@ -1,83 +1,140 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog }         from '@angular/material/dialog';
-import { CommonModule }      from '@angular/common';
-import { FormsModule }       from '@angular/forms';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { CategoryDetailModalComponent } from './category-detail-modal.component';
-import { ProductModalComponent }        from './product-modal.component';
-
-export interface StockItem {
-  id: number;
-  productName: string;
-  quantity: number;
-  price: number;
-  category: string;
-}
+import {
+  StockService,
+  StockItemAPI,
+  StockItemCreateAPI,
+  SubcategoryAPI
+} from '../../../services/stock.service';
 
 @Component({
   selector: 'app-stock-page',
   standalone: true,
-  imports: [ CommonModule, FormsModule ],
+  imports: [CommonModule, ReactiveFormsModule, NgbModule],
   templateUrl: './stock.page.html',
   styleUrls: ['./stock.page.scss']
 })
 export class StockPageComponent implements OnInit {
-  // Datos de ejemplo
-  stockItems: StockItem[] = [
-    { id: 1, productName: 'Batería modelo A', quantity: 50, price: 9.99,  category: 'Repuestos'    },
-    { id: 2, productName: 'Pantalla LCD X',  quantity: 20, price: 49.99, category: 'Dispositivos' },
-    { id: 3, productName: 'Cable USB',        quantity: 100, price: 2.50, category: 'Consumibles'  }
-    // …más ítems si quieres
-  ];
+  @ViewChild('productModal', { static: true }) productModal!: TemplateRef<any>;
 
-  // Tres pestañas fijas
-  tabs: string[] = ['Repuestos', 'Dispositivos', 'Consumibles'];
+  tabs        = ['Repuestos', 'Dispositivos', 'Insumos'];
   selectedTab = this.tabs[0];
 
-  constructor(private dialog: MatDialog) {}
+  items: StockItemAPI[]        = [];
+  subcategories: SubcategoryAPI[] = [];
 
-  ngOnInit(): void {}
+  form!: FormGroup;
+  preview: string | null       = null;
+  modalRef: any;
 
-  selectTab(tab: string) {
+  constructor(
+    private fb: FormBuilder,
+    private stockSvc: StockService,
+    private modalService: NgbModal
+  ) {}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      id:              [null],
+      subcategory_id:  [null, Validators.required],
+      product_name:    ['', Validators.required],
+      quantity:        [1, [Validators.required, Validators.min(1)]],
+      price:           [0, [Validators.required, Validators.min(0)]],
+      image_path:      [''],
+      estado:          ['Operativo', Validators.required]
+    });
+
+    this.loadSubcategories();
+    this.loadItems();
+  }
+
+  private loadSubcategories(): void {
+    this.stockSvc.listSubcategories().subscribe({
+      next: sc => this.subcategories = sc,
+      error: err => console.error('Error cargando subcategorías', err)
+    });
+  }
+
+  private loadItems(): void {
+    this.stockSvc.listItems().subscribe({
+      next: all => {
+        // filtramos por pestaña en base al nombre de la subcategoría
+        this.items = all.filter(i => {
+          const sub = this.subcategories.find(s => s.id === i.subcategory_id);
+          return sub?.name === this.selectedTab;
+        });
+      },
+      error: err => console.error('Error cargando items', err)
+    });
+  }
+
+  selectTab(tab: string): void {
     this.selectedTab = tab;
+    this.loadItems();
   }
 
-  get filteredItems(): StockItem[] {
-    return this.stockItems.filter(i => i.category === this.selectedTab);
-  }
-
-  addProduct() {
-    const name = prompt('Nombre del producto:');
-    if (!name) return;
-
-    const qtyStr   = prompt('Cantidad:') || '0';
-    const priceStr = prompt('Precio:')   || '0';
-
-    const newItem: StockItem = {
-      id: this.stockItems.length
-        ? Math.max(...this.stockItems.map(i => i.id)) + 1
-        : 1,
-      productName: name,
-      quantity:    parseInt(qtyStr,   10),
-      price:       parseFloat(priceStr),
-      category:    this.selectedTab
-    };
-    this.stockItems.push(newItem);
-  }
-
-  editProduct(item: StockItem) {
-    const name    = prompt('Editar nombre:',   item.productName);
-    const qty     = prompt('Editar cantidad:', item.quantity.toString());
-    const price   = prompt('Editar precio:',   item.price.toString());
-
-    if (name  !== null) item.productName = name;
-    if (qty   !== null) item.quantity    = parseInt(qty, 10);
-    if (price !== null) item.price       = parseFloat(price);
-  }
-
-  deleteProduct(item: StockItem) {
-    if (confirm(`¿Eliminar "${item.productName}"?`)) {
-      this.stockItems = this.stockItems.filter(i => i.id !== item.id);
+  openModal(item?: StockItemAPI): void {
+    if (item) {
+      this.form.patchValue(item);
+      this.preview = item.image_path || null;
+    } else {
+      this.form.reset({
+        id: null,
+        subcategory_id: null,
+        product_name: '',
+        quantity: 1,
+        price: 0,
+        image_path: '',
+        estado: 'Operativo'
+      });
+      this.preview = null;
     }
+
+    this.modalRef = this.modalService.open(this.productModal, { centered: true, size: 'lg' });
+    this.modalRef.result.finally(() => this.form.reset());
+  }
+
+  onFileChange(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.preview = reader.result as string;
+      this.form.patchValue({ image_path: this.preview });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  save(): void {
+    if (this.form.invalid) return;
+
+    const value = this.form.value;
+    const payload: StockItemCreateAPI & Partial<Pick<StockItemAPI, 'id'>> = {
+      subcategory_id: value.subcategory_id,
+      product_name:   value.product_name,
+      quantity:       value.quantity,
+      price:          value.price,
+      image_path:     value.image_path,
+      estado:         value.estado,
+      id:             value.id
+    };
+
+    const obs = payload.id
+      ? this.stockSvc.updateItem(payload as StockItemAPI)
+      : this.stockSvc.createItem(payload as StockItemCreateAPI);
+
+    obs.subscribe(() => {
+      this.loadItems();
+      this.modalRef.close();
+    });
+  }
+
+  deleteItem(item: StockItemAPI): void {
+    if (!confirm(`¿Eliminar "${item.product_name}"?`)) return;
+    this.stockSvc.deleteItem(item.id).subscribe(() => this.loadItems());
   }
 }
