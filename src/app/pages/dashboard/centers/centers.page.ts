@@ -1,87 +1,98 @@
 // src/app/pages/dashboard/centers/centers.page.ts
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   CentersService,
   CenterRead,
   CenterCreate,
-  CenterUpdate
+  CenterUpdate,
 } from '../../../services/centers.service';
+import { CentersInventoryPage } from '../centers-inventory/centers-inventory.page';
 
 @Component({
   selector: 'app-centers-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgbModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule
+  ],
   templateUrl: './centers.page.html',
   styleUrls: ['./centers.page.scss']
 })
 export class CentersPageComponent implements OnInit {
-  centers: CenterRead[] = [];
-  form!: FormGroup;
-  modalTitle = '';
-  editing?: CenterRead;
-  private modalRef!: NgbModalRef;
+  @ViewChild('modalContent', { static: true })
+  modalContent!: TemplateRef<any>;
 
-  @ViewChild('centerModal', { static: true }) centerModal!: TemplateRef<any>;
+  centers: CenterRead[] = [];
+  filterTerm = '';
+  form!: FormGroup;
+  editingId: number | null = null;
 
   constructor(
+    private svc: CentersService,
     private fb: FormBuilder,
-    private centersSvc: CentersService,
-    private modal: NgbModal
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
+    this.load();
     this.form = this.fb.group({
       center: ['', Validators.required],
-      phonenumber: ['', Validators.required]
+      phonenumber: ['', Validators.required],
     });
-    this.load();
   }
 
-  load(): void {
-    this.centersSvc.list().subscribe(list => (this.centers = list));
+  load() {
+    this.svc.list().subscribe(list => (this.centers = list));
   }
 
-  openAdd(): void {
-    this.editing = undefined;
-    this.modalTitle = 'Agregar Centro';
-    this.form.reset();
-    this.modalRef = this.modal.open(this.centerModal, { centered: true });
+  onFilterChange(e: any) {
+    this.filterTerm = e.target.value;
   }
 
-  openEdit(c: CenterRead): void {
-    this.editing = c;
-    this.modalTitle = 'Editar Centro';
-    this.form.patchValue({
-      center: c.center,
-      phonenumber: c.phonenumber
-    });
-    this.modalRef = this.modal.open(this.centerModal, { centered: true });
+  get filteredCenters() {
+    return this.centers.filter(c =>
+      c.center.toLowerCase().includes(this.filterTerm.toLowerCase())
+    );
   }
 
-  delete(c: CenterRead): void {
-    if (!confirm(`¿Eliminar el centro "${c.center}"?`)) return;
-    this.centersSvc.delete(c.id).subscribe(() => this.load());
-  }
-
-  save(): void {
-    if (this.form.invalid) return;
-    const payload: CenterCreate = this.form.value;
-    if (this.editing) {
-      this.centersSvc
-        .update(this.editing.id, payload as CenterUpdate)
-        .subscribe(() => {
-          this.load();
-          this.modalRef.close();
-        });
+  openModal(c?: CenterRead) {
+    this.editingId = c?.id ?? null;
+    if (c) {
+      this.form.patchValue(c);
     } else {
-      this.centersSvc.create(payload).subscribe(() => {
-        this.load();
-        this.modalRef.close();
-      });
+      this.form.reset();
     }
+    this.modalService.open(this.modalContent, { size: 'md' });
+  }
+
+  save() {
+    const payload: CenterCreate | CenterUpdate = this.form.value;
+    const call = this.editingId
+      ? this.svc.update(this.editingId, payload as CenterUpdate)
+      : this.svc.create(payload as CenterCreate);
+
+    call.subscribe(() => {
+      this.modalService.dismissAll();
+      this.load();
+    });
+  }
+
+  deleteCenter(c: CenterRead) {
+    if (!confirm(`¿Eliminar centro "${c.center}"?`)) return;
+    this.svc.delete(c.id).subscribe(() => this.load());
+  }
+
+  openInventory(center: CenterRead) {
+    const ref = this.modalService.open(CentersInventoryPage, {
+      size: 'xl',
+      backdrop: 'static',
+    });
+    ref.componentInstance.centerId = center.id;
+    ref.componentInstance.centerName = center.center;
   }
 }

@@ -1,83 +1,91 @@
 <!-- src/app/pages/dashboard/centers/centers.page.html -->
-<div class="stock-page">
-  <h2>Centros</h2>
+<div class="stock-page centers-page">
+  <h2>CENTROS</h2>
+
+  <input
+    class="form-control mb-3"
+    type="text"
+    placeholder="Buscar centro..."
+    (input)="onFilterChange($event)"
+  />
 
   <table class="table stock-table">
     <thead>
       <tr>
-        <th style="width:5%;">#</th>
+        <th>ID</th>
         <th>Centro</th>
         <th>Teléfono</th>
-        <th class="text-end" style="width:15%;">Acciones</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let c of centers; let i = index">
-        <td>{{ i + 1 }}</td>
+      <tr *ngFor="let c of filteredCenters">
+        <td>{{ c.id }}</td>
         <td>{{ c.center }}</td>
         <td>{{ c.phonenumber }}</td>
-        <td class="text-end">
-          <button class="btn btn-sm btn-outline-primary me-2"
-                  (click)="openEdit(c)">
-            <i class="bi bi-pencil-fill"></i>
+        <td>
+          <button
+            class="btn btn-sm btn-outline-success me-1"
+            (click)="openInventory(c)"
+            title="Ver inventario"
+          >
+            <i class="bi bi-box-seam"></i>
           </button>
-          <button class="btn btn-sm btn-outline-danger"
-                  (click)="delete(c)">
-            <i class="bi bi-trash-fill"></i>
+          <button
+            class="btn btn-sm btn-outline-primary me-1"
+            (click)="openModal(c)"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="deleteCenter(c)"
+          >
+            <i class="bi bi-trash"></i>
           </button>
         </td>
       </tr>
-      <tr *ngIf="centers.length === 0">
-        <td colspan="4" class="text-center py-4 text-muted">
-          No hay centros registrados.
-        </td>
+      <tr *ngIf="filteredCenters.length === 0">
+        <td colspan="4" class="text-center">No hay centros.</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="actions">
-    <button class="btn btn-primary" (click)="openAdd()">
-      <i class="bi bi-plus-circle me-1"></i> Agregar Centro
+  <div class="actions text-end">
+    <button class="btn btn-success" (click)="openModal()">
+      <i class="bi bi-plus-circle"></i> Agregar Centro
     </button>
   </div>
-
-  <!-- Modal para Agregar / Editar -->
-  <ng-template #centerModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title">{{ modalTitle }}</h5>
-      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="form" autocomplete="off">
-        <div class="mb-3">
-          <label class="form-label">Nombre del Centro</label>
-          <input formControlName="center"
-                 class="form-control"
-                 [class.is-invalid]="
-                   form.controls['center'].invalid &&
-                   form.controls['center'].touched
-                 ">
-          <div class="invalid-feedback">El nombre es obligatorio.</div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Teléfono</label>
-          <input formControlName="phonenumber"
-                 class="form-control"
-                 [class.is-invalid]="
-                   form.controls['phonenumber'].invalid &&
-                   form.controls['phonenumber'].touched
-                 ">
-          <div class="invalid-feedback">El teléfono es obligatorio.</div>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
-      <button class="btn btn-primary"
-              [disabled]="form.invalid"
-              (click)="save()">
-        Guardar
-      </button>
-    </div>
-  </ng-template>
 </div>
+
+<!-- Modal Crear/Editar -->
+<ng-template #modalContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{ editingId ? 'Editar Centro' : 'Agregar Centro' }}
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label">Nombre del Centro</label>
+        <input class="form-control" formControlName="center" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Teléfono</label>
+        <input class="form-control" formControlName="phonenumber" />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button
+      class="btn btn-success"
+      [disabled]="form.invalid"
+      (click)="save()"
+    >
+      {{ editingId ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </div>
+</ng-template>

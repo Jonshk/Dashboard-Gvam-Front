@@ -1,0 +1,100 @@
+<!-- src/app/pages/dashboard/centers-inventory/centers-inventory.page.html -->
+<div class="stock-page inventory-page">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        Inventario de <span class="text-highlight">{{ centerName }}</span>
+      </h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+    </div>
+  
+    <div class="modal-body">
+      <div class="mb-3">
+        <label>Importar Excel:</label>
+        <input type="file" (change)="onImportFile($event)" class="form-control" />
+      </div>
+  
+      <table class="table stock-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of inventory">
+            <td>{{ i.id }}</td>
+            <td>{{ i.product_name }}</td>
+            <td>{{ i.quantity }}</td>
+            <td>{{ i.price | currency:'EUR':'symbol':'1.2-2' }}</td>
+            <td>{{ i.category }}</td>
+            <td>{{ i.estado }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="openStockModal(i)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteStock(i)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="inventory.length===0">
+            <td colspan="7" class="text-center">No hay ítems.</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="actions text-end mb-3">
+        <button class="btn btn-success" (click)="openStockModal()">
+          <i class="bi bi-plus-circle"></i> Agregar Ítem
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Agregar/Editar Ítem -->
+  <ng-template #stockModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingStockId ? 'Editar Ítem' : 'Agregar Ítem' }}
+      </h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <label>Producto</label>
+          <input class="form-control" formControlName="product_name" />
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label>Cantidad</label>
+            <input type="number" class="form-control" formControlName="quantity" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Precio</label>
+            <input type="number" step="0.01" class="form-control" formControlName="price" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label>Categoría</label>
+          <input class="form-control" formControlName="category" />
+        </div>
+        <div class="mb-3">
+          <label>Estado</label>
+          <input class="form-control" formControlName="estado" />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+      <button class="btn btn-success" [disabled]="form.invalid" (click)="saveStock()">
+        {{ editingStockId ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </ng-template>
+  

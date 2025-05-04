@@ -1,6 +1,6 @@
 @import '../stock/stock.page.scss'; // importa variables y estilos de stock
 
-.centers-page {
+.centers-inventory-page {
   padding: 20px;
 
   h2 {
@@ -9,18 +9,20 @@
     color: #2c3e50;
   }
 
-  .centers-tabs {
+  .inventory-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
-    .nav-link {
-      color: #2ecc71;
-    }
-    .nav-link.active {
-      background-color: #2ecc71;
+
+    .btn-import {
       color: #fff;
+      background-color: #2ecc71;
+      border-color: #27ae60;
     }
   }
 
-  .centers-table {
+  .inventory-table {
     margin-bottom: 1rem;
 
     th, td {
@@ -44,7 +46,7 @@
     margin-top: 1rem;
   }
 
-  // Modal de crear/editar
+  // Modal de inventario (crear/editar ítem)
   .modal-header {
     background-color: #2ecc71;
     color: #fff;
