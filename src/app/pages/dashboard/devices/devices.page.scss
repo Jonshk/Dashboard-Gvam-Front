@@ -1,0 +1,24 @@
+table {
+  table-layout: fixed;
+}
+
+thead {
+  text-align: center;
+}
+
+tr {
+  text-align: center;
+  vertical-align: middle;
+}
+th:first-child {
+  width: 5px;
+}
+
+.filter-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.active-filter {
+  color: var(--bs-warning) !important;
+}

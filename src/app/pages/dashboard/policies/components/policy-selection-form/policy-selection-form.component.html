@@ -1,0 +1,24 @@
+<form
+  class="d-flex flex-column gap-3"
+  [formGroup]="policyForm"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    Politicas
+    <select class="form-select" name="policy" formControlName="policy">
+      @for (policy of policies; track policy.name) {
+        <option [value]="policy.name">
+          {{ policy.name }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary mt-2"
+    [disabled]="policyForm.invalid"
+  >
+  Añadir Politica
+  </button>
+</form>

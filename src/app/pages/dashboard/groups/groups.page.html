@@ -1,0 +1,34 @@
+<main class="container-fluid">
+  <button class="btn btn-primary" (click)="createMode()">
+    Crear nuevo grupo
+  </button>
+
+  <app-dialog [open]="showFormDialog()" (openChange)="hideFormDialog()">
+    <app-group-form
+      [editGroup]="groupToEdit"
+      [isVisible]="showFormDialog()"
+      (group)="addGroup($event)"
+    ></app-group-form>
+  </app-dialog>
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="'¿Eliminar el grupo ' + groupToDelete?.groupName + '?'"
+    (onDelete)="onDeleteConfirm($event)"
+  >
+  </app-delete-dialog>
+
+  <ul class="list-group my-2">
+    @for (group of groups; track group.groupId) {
+      <li class="list-group-item">
+        <app-group-list-item
+          [group]="group"
+          (onEditGroup)="editGroup($event)"
+          (onDeleteGroup)="deleteGroup($event)"
+        ></app-group-list-item>
+      </li>
+    }
+  </ul>
+  <app-paginator (onPageChange)="list()"></app-paginator>
+</main>

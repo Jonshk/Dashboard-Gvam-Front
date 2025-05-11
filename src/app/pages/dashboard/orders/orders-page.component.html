@@ -1,0 +1,368 @@
+<!-- src/app/pages/dashboard/orders/orders-page.component.html -->
+<div class="orders-page">
+
+  
+
+  <!-- Buscador -->
+  <div class="search-container mb-3">
+    <input
+      type="text"
+      placeholder="Buscar pedido..."
+      (input)="onFilterChange($event)"
+    />
+  </div>
+
+  <!-- PESTAÑAS -->
+  <ul class="nav nav-tabs orders-tabs mb-3">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="!isReceptionTab"
+        (click)="toggleTab(false)"
+      >
+        Envíos
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="isReceptionTab"
+        (click)="toggleTab(true)"
+      >
+        Recepciones
+      </a>
+    </li>
+  </ul>
+
+  <!-- TABLA ENVÍOS -->
+  <table *ngIf="!isReceptionTab" class="table orders-table mb-3">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Centro</th>
+        <th>Fecha</th>
+        <th>Transportista</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of filteredSentOrders">
+        <td>{{ o.id }}</td>
+        <td>{{ getCenterName(o.center_id) }}</td>
+        <td>{{ o.order_date }}</td>
+        <td>{{ o.shipping_company }}</td>
+        <td>{{ o.status }}</td>
+        <td class="actions">
+          <button
+            class="btn btn-sm btn-outline-info"
+            (click)="openOrderDetailsModal(o)"
+          >
+            <i class="bi bi-eye"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-outline-primary"
+            (click)="openOrderModal(o)"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="deleteOrder(o)"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredSentOrders.length===0">
+        <td colspan="6" class="text-center">No hay envíos.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TABLA RECEPCIONES -->
+  <!-- src/app/pages/dashboard/orders/orders-page.component.html -->
+<table *ngIf="isReceptionTab" class="table orders-table mb-3">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Emisor</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of filteredReceptions">
+      <td>{{ r.id }}</td>
+      <td>{{ getCenterName(r.center_id) }}</td>
+      <td>{{ r.reception_date }}</td>
+      <td class="actions">
+        <!-- Ver detalle -->
+        <button class="btn btn-sm btn-outline-info"
+                (click)="openReceptionDetailsModal(r)">
+          <i class="bi bi-eye"></i>
+        </button>
+        <!-- Editar recepción -->
+        <button class="btn btn-sm btn-outline-primary"
+                (click)="openReceptionModal(r)">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <!-- Eliminar recepción -->
+        <button class="btn btn-sm btn-outline-danger"
+                (click)="deleteReception(r)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="filteredReceptions.length===0">
+      <td colspan="4" class="text-center">No hay recepciones.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+  <!-- BOTONES NUEVO -->
+  <div class="action-buttons mb-3">
+    <button
+      *ngIf="!isReceptionTab"
+      class="btn btn-primary"
+      (click)="openOrderModal()"
+    >
+      <i class="bi bi-plus-circle"></i> Nuevo envío
+    </button>
+    <button
+      *ngIf="isReceptionTab"
+      class="btn btn-primary"
+      (click)="openReceptionModal()"
+    >
+      <i class="bi bi-plus-circle"></i> Nueva recepción
+    </button>
+  </div>
+
+  
+  <!-- modal NUEVO/EDITAR envío -->
+  <div class="modal fade" tabindex="-1"
+       [class.show]="showOrderModal"
+       [style.display]="showOrderModal ? 'block' : 'none'">
+    <div class="modal-dialog modal-lg"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditOrder ? 'Editar envío' : 'Nuevo envío' }}</h5>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="orderForm">
+          <!-- centro destino -->
+          <div class="mb-3">
+            <label>Centro destino</label>
+            <select formControlName="center_id" class="form-select">
+              <option [ngValue]="null" disabled>-- Selecciona centro --</option>
+              <option *ngFor="let c of centers" [value]="c.id">{{c.center}}</option>
+            </select>
+          </div>
+          <!-- transportista -->
+          <div class="mb-3">
+            <label>Transportista</label>
+            <select formControlName="shipping_company" class="form-select">
+              <option [ngValue]="null" disabled>-- Selecciona --</option>
+              <option *ngFor="let t of carriers" [value]="t">{{t}}</option>
+            </select>
+          </div>
+          <!-- items -->
+          <div formArrayName="items" class="mb-3">
+            <label>Ítems</label>
+            <div *ngFor="let g of orderItems.controls; let i=index"
+                 [formGroupName]="i"
+                 class="d-flex align-items-end mb-2">
+              <div class="me-2 flex-grow-1">
+                <select formControlName="product_name" class="form-select">
+                  <option [ngValue]="null" disabled>-- Producto --</option>
+                  <option *ngFor="let p of products"
+                          [value]="p.product_name">
+                    {{p.product_name}} ({{p.quantity}} uds)
+                  </option>
+                </select>
+              </div>
+              <div class="me-2" style="width:100px">
+                <input type="number"
+                       formControlName="quantity"
+                       class="form-control"
+                       min="1" />
+              </div>
+              <button class="btn btn-outline-danger btn-sm"
+                      (click)="removeOrderItem(i)">– Quitar</button>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm"
+                    (click)="addOrderItem()">+ Añadir ítem</button>
+          </div>
+          <!-- fecha -->
+          <div class="mb-3">
+            <label>Fecha envío</label>
+            <input type="date" formControlName="order_date" class="form-control"/>
+          </div>
+          <!-- estado -->
+          <div class="mb-3">
+            <label>Estado</label>
+            <select formControlName="status" class="form-select">
+              <option value="Pendiente">Pendiente</option>
+              <option value="Procesado">Procesado</option>
+              <option value="En tránsito">En tránsito</option>
+              <option value="Entregado">Entregado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+          <!-- comentarios -->
+          <div class="mb-3">
+            <label>Comentarios</label>
+            <textarea formControlName="comments"
+                      class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+        <div *ngIf="orderErrorMsg" class="alert alert-danger">
+          {{orderErrorMsg}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeAllModals()">Cancelar</button>
+        <button class="btn btn-primary"
+                [disabled]="orderForm.invalid"
+                (click)="submitOrder()">
+          {{ isEditOrder ? 'Guardar' : 'Crear' }}
+        </button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- modal NUEVA recepción -->
+  <div class="modal fade" tabindex="-1"
+       [class.show]="showReceptionModal"
+       [style.display]="showReceptionModal ? 'block' : 'none'">
+    <div class="modal-dialog modal-lg"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nueva recepción</h5>
+        <button type="button" class="btn-close" (click)="closeAllModals()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="receptionForm">
+          <!-- Centro emisor -->
+          <div class="mb-3">
+            <label>Centro emisor</label>
+            <select formControlName="center_id" class="form-select">
+              <option [ngValue]="null" disabled>-- Selecciona emisor --</option>
+              <option *ngFor="let c of centers" [value]="c.id">{{c.center}}</option>
+            </select>
+          </div>
+          <!-- Ítems solo de ese centro -->
+          <div formArrayName="items" class="mb-3">
+            <label>Ítems</label>
+            <div *ngFor="let g of receptionItems.controls; let i=index"
+                 [formGroupName]="i"
+                 class="d-flex align-items-end mb-2">
+              <div class="me-2 flex-grow-1">
+                <select formControlName="product_name" class="form-select">
+                  <option [ngValue]="null" disabled>-- Producto --</option>
+                  <option *ngFor="let p of receptionProducts"
+                          [value]="p.product_name">
+                    {{p.product_name}} ({{p.quantity}} uds)
+                  </option>
+                </select>
+              </div>
+              <div class="me-2" style="width:100px">
+                <input type="number"
+                       formControlName="quantity"
+                       class="form-control"
+                       min="1"/>
+              </div>
+              <button class="btn btn-outline-danger btn-sm"
+                      (click)="removeReceptionItem(i)">– Quitar</button>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm"
+                    (click)="addReceptionItem()">+ Añadir ítem</button>
+          </div>
+          <!-- Fecha recepción -->
+          <div class="mb-3">
+            <label>Fecha recepción</label>
+            <input type="date"
+                   formControlName="reception_date"
+                   class="form-control"/>
+          </div>
+        </form>
+        <div *ngIf="receptionErrorMsg" class="alert alert-danger">
+          {{receptionErrorMsg}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeAllModals()">Cancelar</button>
+        <button class="btn btn-primary"
+                [disabled]="receptionForm.invalid"
+                (click)="submitReception()">
+          Crear
+        </button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- modal DETALLE envío -->
+<div class="modal fade" tabindex="-1"
+[class.show]="showOrderDetailsModal"
+[style.display]="showOrderDetailsModal ? 'block' : 'none'">
+<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-content modal-custom">
+ <div class="modal-header modal-header-custom">
+   <h5 class="modal-title">Detalle Envío</h5>
+   <button type="button" class="btn-close btn-close-white" aria-label="Cerrar"
+           (click)="closeAllModals()"></button>
+ </div>
+ <div class="modal-body modal-body-custom" *ngIf="selectedOrder">
+  <p><strong>ID:</strong> {{selectedOrder?.id}}</p>
+   <p><strong>Centro:</strong> {{getCenterName(selectedOrder.center_id)}}</p>
+   <p><strong>Fecha:</strong> {{selectedOrder.order_date}}</p>
+   <p><strong>Transportista:</strong> {{selectedOrder.shipping_company}}</p>
+   <p><strong>Estado:</strong> {{selectedOrder.status}}</p>
+   <p *ngIf="selectedOrder.comments">
+     <strong>Comentarios:</strong> {{selectedOrder.comments}}
+   </p>
+   <hr>
+   <h6>Ítems:</h6>
+   <ul>
+     <li *ngFor="let it of selectedOrder.items">
+       {{it.product_name}} — {{it.quantity}} uds
+     </li>
+   </ul>
+ </div>
+ <div class="modal-footer modal-footer-custom">
+   <button class="btn btn-secondary" (click)="closeAllModals()">Cerrar</button>
+ </div>
+</div>
+</div>
+</div>
+
+<!-- modal DETALLE recepción -->
+<div class="modal fade" tabindex="-1"
+[class.show]="showReceptionDetailsModal"
+[style.display]="showReceptionDetailsModal ? 'block' : 'none'">
+<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-content modal-custom">
+ <div class="modal-header modal-header-custom">
+   <h5 class="modal-title">Detalle Recepción</h5>
+   <button type="button" class="btn-close btn-close-white" aria-label="Cerrar"
+           (click)="closeAllModals()"></button>
+ </div>
+ <div class="modal-body modal-body-custom" *ngIf="selectedReception">
+   <p><strong>ID:</strong> {{selectedReception.id}}</p>
+   <p><strong>Emisor:</strong> {{getCenterName(selectedReception.center_id)}}</p>
+   <p><strong>Receptor:</strong> Centro Central</p>
+   <p><strong>Fecha:</strong> {{selectedReception.reception_date}}</p>
+   <hr>
+   <h6>Ítems:</h6>
+   <ul>
+     <li *ngFor="let it of selectedReception.items">
+       {{it.product_name}} — {{it.quantity}} uds
+     </li>
+   </ul>
+ </div>
+ <div class="modal-footer modal-footer-custom">
+   <button class="btn btn-secondary" (click)="closeAllModals()">Cerrar</button>
+ </div>
+</div>
+</div>
+</div>

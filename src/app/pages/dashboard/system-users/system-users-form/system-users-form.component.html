@@ -1,0 +1,54 @@
+<form
+  class="d-flex flex-column gap-3"
+  [formGroup]="userForm"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    Nombre
+    <input
+      type="text"
+      class="form-control"
+      name="name"
+      formControlName="name"
+    />
+  </label>
+  <label>
+    Email
+    <input
+      type="email"
+      class="form-control"
+      name="email"
+      formControlName="email"
+    />
+  </label>
+  <label>
+    Contraseña
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      formControlName="password"
+    />
+  </label>
+  <label>
+    Repetir contraseña
+    <input
+      type="password"
+      class="form-control"
+      name="repeatPassword"
+      formControlName="repeatPassword"
+    />
+  </label>
+
+  <button
+    type="submit"
+    class="btn btn-primary mt-2"
+    [disabled]="userForm.invalid"
+  >
+    @if (editUser()) {
+      Editar usuario de sistema
+    } @else {
+      Crear usuario de sistema
+    }
+  </button>
+</form>

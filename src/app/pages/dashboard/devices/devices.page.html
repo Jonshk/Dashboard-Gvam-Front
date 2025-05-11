@@ -1,0 +1,558 @@
+<main class="container-fluid">
+  <button class="btn btn-primary me-2" (click)="createMode()">
+    Crear nuevo dispositivo
+  </button>
+
+  <button
+    class="btn btn-light"
+    [disabled]="loadingService.isLoading()"
+    (click)="registerDevices()"
+  >
+    Actualizar listado de dispositivos
+  </button>
+  @if (newDevices) {
+    <p>Nuevos dispositivos registrados: {{ newDevices.registeredDevices }}</p>
+  }
+
+  <!-- Diálogo de creación de dispositivo -->
+  <app-dialog [open]="showFormDialog()" (openChange)="hideFormDialog()">
+    <app-device-form
+      [groupId]="groupId()"
+      [groups]="groups"
+      [visible]="showFormDialog()"
+      [editDevice]="deviceToEdit"
+      [deviceUsers]="deviceUsers"
+      (editedDevice)="updateDevice($event)"
+      (deviceCreated)="onDeviceCreated($event)"
+    ></app-device-form>
+  </app-dialog>
+
+  <!-- Diálogo de configuración de dispositivo -->
+  <app-dialog [open]="showConfigDialog()" (openChange)="hideConfigDialog()">
+    <app-device-custom-command-form
+      [groupId]="groupId()"
+      [device]="deviceToConfig"
+      [geofences]="geofences"
+      (onDeviceChange)="updateDevice($event)"
+    ></app-device-custom-command-form>
+  </app-dialog>
+
+  <!-- Diálogo de acciones a múltiples dispositivos -->
+  <app-dialog [open]="showActionDialog()" (openChange)="hideActionDialog()">
+    @switch (actionDialog) {
+      @case ("policies") {
+        @if (groupId()) {
+          <ng-container
+            *ngTemplateOutlet="applyPolicyFormTemplate"
+          ></ng-container>
+        }
+      }
+      @case ("command") {
+        <ng-container
+          *ngTemplateOutlet="sendCommandFormTemplate"
+        ></ng-container>
+      }
+      @case ("migrate") {
+        <ng-container *ngTemplateOutlet="migrateFromTemplate"></ng-container>
+      }
+      @case ("delete") {
+        <ng-container *ngTemplateOutlet="deleteDevices"></ng-container>
+      }
+      @case ("customCommand") {
+        <ng-container
+          *ngTemplateOutlet="customCommandFormTemplate"
+        ></ng-container>
+      }
+    }
+  </app-dialog>
+
+  <app-delete-dialog
+    [open]="showDeleteDialog()"
+    (openChange)="hideDeleteDialog()"
+    [message]="
+      deviceToDelete?.enrolled
+        ? '¿Eliminar el dispositivo ' +
+          deviceToDelete?.deviceName +
+          '? El dispositivo será restablecido a estado de fábrica'
+        : '¿Eliminar el dispositivo ' + deviceToDelete?.deviceName + '?'
+    "
+    (onDelete)="onDeleteConfirm($event)"
+  ></app-delete-dialog>
+
+  <div class="card mt-4">
+    <div
+      class="card-header card-no-border d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <button
+          [className]="
+            showRegisteredDevices()
+              ? 'btn btn-primary'
+              : 'btn btn-outline-primary'
+          "
+          (click)="toggleRegisteredDevices(true)"
+        >
+          Dispositivos registrados
+        </button>
+        <button
+          [className]="
+            !showRegisteredDevices()
+              ? 'btn btn-primary'
+              : 'btn btn-outline-primary'
+          "
+          (click)="toggleRegisteredDevices(false)"
+        >
+          Dispositivos no registrados
+        </button>
+      </div>
+
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <button class="btn btn-light" (click)="selectAll()">
+          Seleccionar todos
+        </button>
+        <button class="btn btn-light" (click)="unselectAll()">
+          Deseleccionar todos
+        </button>
+
+        <div class="btn-group" ngbDropdown>
+          <button
+            type="button"
+            class="btn btn-warning dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            Acciones
+          </button>
+          <ul class="dropdown-menu" ngbDropdownMenu>
+            @if (showRegisteredDevices()) {
+              <li>
+                <button
+                  class="dropdown-item"
+                  (click)="changeActionDialog('customCommand')"
+                  ngbDropdownItem
+                >
+                  Configurar
+                </button>
+              </li>
+              @if (groupId()) {
+                <li>
+                  <button
+                    class="dropdown-item"
+                    (click)="changeActionDialog('policies')"
+                    ngbDropdownItem
+                  >
+                    Cambiar política
+                  </button>
+                </li>
+              }
+              <li>
+                <button
+                  class="dropdown-item"
+                  (click)="changeActionDialog('command')"
+                  ngbDropdownItem
+                >
+                  Enviar comando
+                </button>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  (click)="changeActionDialog('migrate')"
+                  ngbDropdownItem
+                >
+                  Migrar de grupo
+                </button>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+            }
+            <li>
+              <button
+                class="dropdown-item text-danger"
+                (click)="changeActionDialog('delete')"
+                ngbDropdownItem
+              >
+                Eliminar
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    @if (showRegisteredDevices()) {
+      <div class="card-header card-no-border w-50">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Buscar por nombre de dispositivo o grupo (para filtrar)"
+          class="form-control"
+          name="searchQuery"
+        />
+      </div>
+    }
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="tranaction-table w-100">
+          @if (showRegisteredDevices()) {
+            <thead>
+              <tr>
+                <th scope="col">-</th>
+                <th scope="col">
+                  Nombre del dispositivo
+                  <div class="filter-column">
+                    <span
+                      ><app-feathericon
+                        icon="chevron-up"
+                        [class.active-filter]="
+                          activeFilter() === 'name-' + OrderFilter.ASC
+                        "
+                        (click)="filter('name', OrderFilter.ASC)"
+                      />
+                      <app-feathericon
+                        icon="chevron-down"
+                        [class.active-filter]="
+                          activeFilter() === 'name-' + OrderFilter.DESC
+                        "
+                        (click)="filter('name', OrderFilter.DESC)"
+                      />
+                    </span>
+                  </div>
+                </th>
+                @if (!groupId()) {
+                  <th scope="col">
+                    Grupo
+                    <div class="filter-column">
+                      <span
+                        ><app-feathericon
+                          icon="chevron-up"
+                          [class.active-filter]="
+                            activeFilter() === 'group-' + OrderFilter.ASC
+                          "
+                          (click)="filter('group', OrderFilter.ASC)"
+                        />
+                        <app-feathericon
+                          icon="chevron-down"
+                          [class.active-filter]="
+                            activeFilter() === 'group-' + OrderFilter.DESC
+                          "
+                          (click)="filter('group', OrderFilter.DESC)"
+                        />
+                      </span>
+                    </div>
+                  </th>
+                }
+                <th scope="col">Acciones</th>
+                <th scope="col">Política</th>
+                <th scope="col">Comando</th>
+                <th scope="col">Migrar de grupo</th>
+                <th scope="col">Control remoto</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (device of enrolledDevices(); track device.deviceId) {
+                <tr
+                  app-device-list-item
+                  [groupId]="groupId()"
+                  [device]="device"
+                  [policies]="policies"
+                  [groups]="groups"
+                  [deviceUser]="getDeviceUser(device.deviceUserId)"
+                  (deviceChange)="selectDevice($event)"
+                  (onEditDevice)="editDevice($event)"
+                  (onConfigDevice)="configDevice($event)"
+                  (onDeleteDevice)="deleteDevice($event)"
+                ></tr>
+              }
+            </tbody>
+
+            <tfoot class="d-flex gap-2 w-100">
+              <app-paginator
+                #registeredPaginator
+                (onPageChange)="loadPaginatedDevices($event)"
+              ></app-paginator>
+            </tfoot>
+          } @else {
+            <thead>
+              <tr>
+                <th scope="col">-</th>
+                <th scope="col">
+                  Nombre del dispositivo
+                  <div class="filter-column">
+                    <span
+                      ><app-feathericon
+                        icon="chevron-up"
+                        [class.active-filter]="
+                          activeFilter() === 'name-' + OrderFilter.ASC
+                        "
+                        (click)="filter('name', OrderFilter.ASC)"
+                      />
+                      <app-feathericon
+                        icon="chevron-down"
+                        [class.active-filter]="
+                          activeFilter() === 'name-' + OrderFilter.DESC
+                        "
+                        (click)="filter('name', OrderFilter.DESC)"
+                      />
+                    </span>
+                  </div>
+                </th>
+                @if (!groupId()) {
+                  <th scope="col">
+                    Grupo
+                    <div class="filter-column">
+                      <span
+                        ><app-feathericon
+                          icon="chevron-up"
+                          [class.active-filter]="
+                            activeFilter() === 'group-' + OrderFilter.DESC
+                          "
+                          (click)="filter('group', OrderFilter.ASC)"
+                        />
+                        <app-feathericon
+                          icon="chevron-down"
+                          [class.active-filter]="
+                            activeFilter() === 'group-' + OrderFilter.DESC
+                          "
+                          (click)="filter('group', OrderFilter.DESC)"
+                        />
+                      </span>
+                    </div>
+                  </th>
+                }
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (device of notEnrolledDevices(); track device.deviceId) {
+                <tr
+                  app-device-list-item
+                  [groupId]="groupId()"
+                  [device]="device"
+                  [policies]="policies"
+                  [groups]="groups"
+                  [deviceUser]="getDeviceUser(device.deviceUserId)"
+                  (deviceChange)="selectDevice($event)"
+                  (onEditDevice)="editDevice($event)"
+                  (onDeleteDevice)="deleteDevice($event)"
+                ></tr>
+              }
+            </tbody>
+            <tfoot class="d-flex gap-2 w-100">
+              <app-paginator
+                #unregisteredPaginator
+                (onPageChange)="loadPaginatedDevices($event)"
+              ></app-paginator>
+            </tfoot>
+          }
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!------------ TEMPLATES ------------>
+
+<!-- Texto indicativo de los dispositivos seleccionados -->
+<ng-template #devicesCounter>
+  <small [className]="selectedDevices().length === 0 ? 'text-danger' : ''">
+    @if (selectedDevices().length === 0) {
+      No hay ningún dispositivo seleccionado
+    } @else {
+      Has seleccionado {{ selectedDevices().length }}
+      {{ selectedDevices().length > 1 ? "dispositivos" : "dispositivo" }}
+    }
+  </small>
+</ng-template>
+
+<!-- Formulario para cambiar política a los dispositivos seleccionados -->
+<ng-template #applyPolicyFormTemplate>
+  <form [formGroup]="applyPolicyForm" (ngSubmit)="applyPolicyAction()">
+    <label class="w-100">
+      Elige la política para aplicar a los dispositivos seleccionados:
+      <select class="form-select" name="name" formControlName="name">
+        @for (policy of policies; track policy.name) {
+          <option [value]="policy.name">
+            {{ policy.name }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <ng-container *ngTemplateOutlet="devicesCounter"></ng-container>
+
+    <button
+      class="btn btn-primary w-100 mt-2"
+      type="submit"
+      [disabled]="
+        applyPolicyForm.invalid ||
+        selectedDevices().length === 0 ||
+        loadingService.isLoading()
+      "
+    >
+      Aplicar política a dispositivos
+    </button>
+  </form>
+</ng-template>
+
+<!-- Formulario para enviar comando a los dispositivos seleccionados -->
+<ng-template #sendCommandFormTemplate>
+  <form [formGroup]="sendCommandForm" (ngSubmit)="sendCommandAction()">
+    <label class="w-100">
+      Elige el comando para enviar a los dispositivos seleccionados:
+      <select class="form-select" name="command" formControlName="command">
+        @for (deviceCommand of deviceCommandKeys; track deviceCommand) {
+          <option [value]="DeviceCommand[deviceCommand]">
+            {{ DeviceCommandDescription[deviceCommand] }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <ng-container *ngTemplateOutlet="devicesCounter"></ng-container>
+
+    <button
+      class="btn btn-primary w-100 mt-2"
+      type="submit"
+      [disabled]="
+        sendCommandForm.invalid ||
+        selectedDevices().length === 0 ||
+        loadingService.isLoading()
+      "
+    >
+      Enviar comando a dispositivos
+    </button>
+  </form>
+</ng-template>
+
+<!-- Formulario para migrar de grupo los dispositivos seleccionados -->
+<ng-template #migrateFromTemplate>
+  <form [formGroup]="migrateForm" (ngSubmit)="migrateAction()">
+    <label class="w-100">
+      Elige el grupo al que migrar a los dispositivos seleccionados:
+      <select class="form-select" name="groupId" formControlName="groupId">
+        @for (group of groups; track group.groupId) {
+          <option [value]="group.groupId">
+            {{ group.groupName }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <ng-container *ngTemplateOutlet="devicesCounter"></ng-container>
+
+    <button
+      class="btn btn-primary w-100 mt-2"
+      type="submit"
+      [disabled]="
+        sendCommandForm.invalid ||
+        selectedDevices().length === 0 ||
+        loadingService.isLoading()
+      "
+    >
+      Migrar dispositivos
+    </button>
+  </form>
+</ng-template>
+
+<!-- Formulario para eliminar los dispositivos seleccionados -->
+<ng-template #deleteDevices>
+  <div class="w-100">
+    <p>
+      @if (showRegisteredDevices()) {
+        ¿Eliminar los dispositivos seleccionados? Los dispositivos serán
+        restablecidos a estado de fábrica
+      } @else {
+        ¿Eliminar los dispositivos seleccionados?
+      }
+    </p>
+
+    <ng-container *ngTemplateOutlet="devicesCounter"></ng-container>
+
+    <div class="d-flex gap-2 flex-wrap justify-content-end">
+      <button class="btn btn-outline-secondary" (click)="hideActionDialog()">
+        Cancelar
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="deleteAction()"
+        [disabled]="
+          selectedDevices().length === 0 || loadingService.isLoading()
+        "
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Formulario para enviar comandos personalizados (ajustes) a los dispositivos seleccionados -->
+<ng-template #customCommandFormTemplate>
+  <form
+    class="d-flex flex-column gap-2"
+    [formGroup]="customCommandForm"
+    (ngSubmit)="customCommandAction()"
+  >
+    <label class="w-100">
+      Elige el ajuste para aplicar a los dispositivos seleccionados:
+      <select class="form-select" name="command" formControlName="command">
+        @for (
+          deviceCustomCommand of deviceCustomCommandKeys;
+          track deviceCustomCommand
+        ) {
+          <option [value]="DeviceCustomCommand[deviceCustomCommand]">
+            {{ DeviceCustomCommandDescription[deviceCustomCommand] }}
+          </option>
+        }
+      </select>
+    </label>
+
+    @if (
+      customCommandForm.value.command === DeviceCustomCommand.ADJUST_VOLUME
+    ) {
+      <label class="w-100">
+        Nivel de volumen: {{ customCommandForm.value.value }}
+        <input
+          type="range"
+          name="value"
+          formControlName="value"
+          class="form-range"
+          min="0"
+          max="100"
+        />
+      </label>
+    } @else if (
+      customCommandForm.value.command === DeviceCustomCommand.ACTIVATE_GEOFENCE
+    ) {
+      <label class="w-100">
+        Geovalla
+        <select class="form-select" name="value" formControlName="value">
+          @for (geofence of geofences; track geofence.geofenceId) {
+            <option [value]="geofence.geofenceId">
+              {{ geofence.geofenceName }}
+            </option>
+          }
+        </select>
+      </label>
+    }
+    <ng-container *ngTemplateOutlet="devicesCounter"></ng-container>
+
+    <small
+      >Para que estos ajustes sean aplicados, es necesario que el agente de los
+      dispositivos esté configurado
+    </small>
+
+    <button
+      class="btn btn-primary w-100 mt-2"
+      type="submit"
+      [disabled]="
+        sendCommandForm.invalid ||
+        selectedDevices().length === 0 ||
+        loadingService.isLoading()
+      "
+    >
+      Cambiar ajuste
+    </button>
+  </form>
+</ng-template>

@@ -1,0 +1,80 @@
+.stock-page {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: #2c3e50;
+  }
+
+  .stock-tabs {
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    .nav-link {
+      color:  #599898;
+    }
+    .nav-link.active {
+      background-color:  #599898;
+      color: #fff;
+    }
+  }
+
+  .search-container {
+    margin-bottom: 15px;
+  
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  }
+
+  .stock-table {
+    margin-bottom: 1rem;
+
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color:  #599898;
+      color: white;
+      font-weight: bold;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+  }
+
+  .actions {
+    text-align: left;
+    display: flex;
+    gap: 10px;
+  }
+}
+
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: left;
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #2980b9;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #1f6391;
+  }
+}

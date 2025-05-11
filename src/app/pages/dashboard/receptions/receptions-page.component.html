@@ -1,0 +1,43 @@
+<div class="receptions-page">
+  
+  <!-- Buscador -->
+  <div class="search-container">
+    <input type="text" placeholder="Buscar recepción..." (input)="onFilterChange($event)" />
+  </div>
+  
+  <!-- Tabla de Recepciones -->
+  <table class="receptions-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Recepción</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reception of receptions">
+        <td>{{ reception.id }}</td>
+        <td>{{ reception.receptionName }}</td>
+        <td>{{ reception.date }}</td>
+        <td>{{ reception.status }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="editReception(reception)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteReception(reception)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Botón para agregar una nueva recepción -->
+  <div class="action-buttons text-center">
+    <button class="btn btn-primary" (click)="addReception()">
+      <i class="bi bi-plus-circle"></i> 
+    </button>
+  </div>
+</div>

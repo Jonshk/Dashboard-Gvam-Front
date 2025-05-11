@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ data.product ? 'Editar Producto' : 'Agregar Producto' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nombre del Producto</mat-label>
+      <input matInput formControlName="productName">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Cantidad</mat-label>
+      <input type="number" matInput formControlName="quantity">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Precio</mat-label>
+      <input type="number" matInput formControlName="price">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Categoría</mat-label>
+      <input matInput formControlName="category">
+    </mat-form-field>
+    <div mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ data.product ? 'Guardar Cambios' : 'Agregar' }}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

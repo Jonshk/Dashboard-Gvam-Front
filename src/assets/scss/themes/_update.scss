@@ -1,0 +1,1171 @@
+/**=====================
+  4.3 Update CSS Start
+==========================**/
+
+
+@import "./../utils/variables";
+
+
+// jsgrid css
+.jsgrid-filter-row {
+
+    select,
+    input {
+        padding: 6px 10px;
+        border: 1px solid $horizontal-border-color;
+        background: $white;
+    }
+}
+
+// popover
+.popover {
+    background-color: $white;
+    border: none;
+    -webkit-box-shadow: 0 0 20px rgba($primary-color, 0.1);
+    box-shadow: 0 0 20px rgba($primary-color, 0.1);
+
+    .popover-header {
+        background-color: $theme-medium-color;
+        color: $primary-color;
+        border-bottom: none;
+    }
+
+    .popover-body {
+        color: rgba(43, 43, 43, 0.7);
+    }
+}
+
+#calendar {
+    .fc-header-toolbar {
+        display: flex;
+
+        @media (max-width:1690px) {
+            display: none;
+        }
+    }
+}
+
+.notification-box {
+    .bookmark-flip {
+        .ProfileCard-avatar {
+            svg {
+                height: 20px !important;
+                width: 20px !important;
+                vertical-align: super !important;
+            }
+        }
+    }
+}
+
+// tooltip css start
+.tooltip {
+    &.bs-tooltip-top {
+        .tooltip-arrow {
+            &:before {
+                border-top-color: $theme-medium-color;
+            }
+        }
+    }
+
+    &.bs-tooltip-bottom {
+        .tooltip-arrow {
+            &:before {
+                border-bottom-color: $theme-medium-color;
+                border-top-color: transparent;
+            }
+        }
+    }
+
+    &.bs-tooltip-start {
+        .tooltip-arrow {
+            &:before {
+                border-left-color: $theme-medium-color;
+                border-top-color: transparent;
+            }
+        }
+    }
+
+    &.bs-tooltip-end {
+        .tooltip-arrow {
+            &:before {
+                border-right-color: $theme-medium-color;
+                border-top-color: transparent;
+            }
+        }
+    }
+
+    .tooltip-inner {
+        background-color: $theme-medium-color;
+        color: $primary-color;
+    }
+
+    .tooltip-arrow {
+        &:before {
+            border-top-color: $theme-medium-color;
+        }
+    }
+}
+
+// tooltip css end
+
+// dropdown css start
+.dropdown-basic {
+    .dropdown {
+        .dropdown-content {
+            a {
+                padding: 12px;
+                color: $dark-editor-document;
+                opacity: 0.6;
+                font-size: 14px;
+                border-top: 1px solid $light-semi-gray;
+                background: $white;
+
+                &:hover {
+                    background-color: $white;
+                }
+            }
+
+            .dropdown-header {
+                padding: 8px 16px;
+                font-weight: 400;
+                color: $dark-color;
+                font-size: 13px;
+            }
+        }
+    }
+
+    .dropup {
+        .dropup-content {
+            top: auto;
+        }
+    }
+}
+
+// dropdown css end
+// accordian css start
+.default-according {
+    .card {
+        .card-header {
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+
+            &.bg-primary,
+            &.bg-secondary {
+                .btn {
+                    border-color: $transparent-color;
+                }
+            }
+
+            i {
+                position: initial;
+                font-size: 20px;
+                display: inline-block;
+                vertical-align: text-bottom;
+                margin-right: 5px;
+
+                [dir="rtl"] & {
+                    margin-right: unset;
+                    margin-left: 5px;
+                }
+            }
+
+            h5 {
+                margin-top: 0;
+            }
+
+            .btn-link {
+                padding: 12px 20px;
+                width: 100%;
+                text-align: left;
+                letter-spacing: 0.7px;
+                font-family: $font-Montserrat;
+                border: 1px solid $light-semi-gray;
+                border-radius: 0;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                font-weight: 600;
+
+                [dir="rtl"] & {
+                    text-align: right;
+                }
+
+                @media (max-width: 575px) {
+                    padding: 12px 15px;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .card-body {
+            padding: 15px 20px;
+            line-height: 22px;
+            font-size: 13px;
+            border-color: $light-semi-gray;
+            border-radius: 0;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            color: $dark-color;
+            border-bottom: none;
+        }
+    }
+}
+
+// accordian css end
+
+// tab-bootstrap css start
+
+.nav-tabs {
+    border-bottom-color: $light-semi-gray;
+
+    .nav-bottom {
+        .nav-item {
+            .nav-link.active {
+                border-color: $light-semi-gray;
+            }
+        }
+    }
+}
+
+.nav-tabs {
+    .nav-item {
+        &.show {
+            .nav-link {
+                font-weight: 500;
+            }
+        }
+    }
+
+    .nav-link {
+        color: $dark-color;
+
+        &.active {
+            font-weight: 500;
+        }
+    }
+
+    &.nav-bottom {
+        .nav-item {
+            .nav-link {
+                &.active {
+                    border-color: $light-gray $light-gray #fff;
+                }
+            }
+        }
+    }
+}
+
+.dropdown-menu {
+    -webkit-box-shadow: 0 0 20px rgba(89, 102, 122, 0.1);
+    box-shadow: 0 0 20px rgba(89, 102, 122, 0.1);
+    border: none;
+    padding: 0;
+    z-index: 1;
+
+    .dropdown-item {
+        color: #2b2b2b;
+        opacity: 0.6;
+        font-size: 14px;
+        padding: 6px 12px;
+        border-top: 1px solid $light-semi-gray;
+        background: $white;
+
+        &:first-child {
+            border-top: none;
+        }
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+
+    .dropdown-divider {
+        margin: 0;
+        border-top: 1px solid #cccccc;
+    }
+}
+
+// tab-bootstrap css end
+
+.border-tab {
+    .nav-tabs {
+        .nav-item {
+            .nav-link {
+                &.active {
+                    border-bottom: 2px solid $primary-color;
+                }
+
+                &.show {
+                    border-bottom: 2px solid $primary-color;
+                }
+
+                &:focus {
+                    border-bottom: 2px solid $primary-color;
+                }
+            }
+        }
+    }
+}
+
+
+.timeliny {
+    .timeliny-dot::before {
+        font-size: $btn-lg-font-size;
+    }
+}
+
+.total-revenue {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+        color: var(--body-font-color);
+        font-weight: 500;
+    }
+
+    a {
+        font-weight: 600;
+    }
+}
+
+.component {
+    .input-group {
+        .btn {
+            line-height: 32px;
+            text-transform: capitalize;
+        }
+    }
+}
+
+.login-card {
+    .login-main {
+        .theme-form {
+            label {
+                font-size: $body-font-size;
+            }
+
+            .show-hide {
+                top: 50%;
+            }
+        }
+    }
+}
+
+// faq css start
+.faq-accordion {
+    .card {
+        .btn-link {
+            svg {
+                margin-left: 20px;
+
+                @media (max-width: 575.98px) {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+// faq css end
+.job-filter {
+    .faq-form {
+        .form-control {
+            padding: 6px 40px 6px 16px;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            // width: 16px;
+            // height: 16px;
+        }
+    }
+}
+
+// editor css
+.note-btn-group {
+    .dropdown-toggle {
+        &.show {
+            ~.dropdown-menu {
+                display: block;
+                top: 30px;
+            }
+        }
+    }
+
+}
+
+
+// owl-carousel css
+
+.carousel {
+    .carousel-indicators {
+        margin-bottom: 3px;
+    }
+}
+
+.mouse-wheel {
+    .owl-stage-outer {
+        .owl-stage {
+            width: 5600px !important;
+
+            .owl-item {
+                width: 225.333px !important;
+            }
+        }
+    }
+}
+
+.carousel-item {
+    .carousel-caption {
+        width: 100%;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        padding: 26px 10px;
+        background-color: rgba($dark-card-background, 0.51);
+    }
+
+    .carousel-opacity {
+        background-color: rgba($light-color, 0.51);
+    }
+}
+
+.carousel {
+    .carousel-control-prev-icon {
+        width: calc(23px + (32 - 23) * ((100vw - 320px) / (1920 - 320)));
+        height: calc(23px + (32 - 23) * ((100vw - 320px) / (1920 - 320)));
+    }
+
+    .carousel-control-next-icon {
+        width: calc(23px + (32 - 23) * ((100vw - 320px) / (1920 - 320)));
+        height: calc(23px + (32 - 23) * ((100vw - 320px) / (1920 - 320)));
+
+    }
+}
+
+
+// Rating 
+.rating-header {
+    h4 {
+        [dir="rtl"] & {
+            direction: ltr;
+        }
+    }
+}
+
+// Animated modal
+.animate-img {
+    .animate-widget {
+        img {
+            width: 100%;
+            height: 350px;
+            margin: 0 auto;
+            object-fit: cover;
+        }
+    }
+}
+
+.modal-popup {
+    &.modal {
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+
+        .modal-dialog {
+            .theme-close {
+                width: calc(25px + (40 - 25) * ((100vw - 320px) / (1920 - 320)));
+                height: calc(25px + (40 - 25) * ((100vw - 320px) / (1920 - 320)));
+                font-size: calc(12px + (14 - 12) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+    }
+}
+
+.animated-modal {
+    .form-select {
+        @media (max-width:442px) {
+            width: 100% !important;
+        }
+    }
+}
+
+// TO-DO scss
+.task-container {
+    .badge {
+        line-height: 13px;
+    }
+}
+
+// Add-post scss
+.add-post {
+    form {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--recent-dashed-border);
+                box-shadow: unset;
+            }
+        }
+    }
+}
+
+// starter kit
+.starter-main {
+    .alert-primary {
+        &.inverse {
+            padding: 13px 20px 13px 65px;
+            border-color: $primary-color;
+            color: $dark-color;
+
+            [dir="rtl"] & {
+                padding: 13px 65px 13px 20px;
+            }
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: 54px;
+                width: 0;
+                height: 0;
+                border-left: 7px solid $primary-color;
+                border-top: 7px solid transparent;
+                border-bottom: 7px solid transparent;
+
+                [dir="rtl"] & {
+                    border-right: 7px solid $primary-color;
+                    border-left: unset;
+                }
+            }
+
+            i {
+                padding: 17px 20px;
+                display: flex;
+                align-items: center;
+                background-color: $primary-color;
+                color: $white;
+                border-radius: 3px 0 0 3px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+
+                [dir="rtl"] & {
+                    right: 0;
+                    left: unset;
+                }
+            }
+        }
+    }
+}
+
+// calendar
+
+.cal-date-widget {
+    .ng-valid {
+        width: 100% !important;
+        padding: 0;
+
+        .ngb-dp-month {
+            width: 100% !important;
+
+            .ngb-dp-weekday,
+            .ngb-dp-day {
+                width: 100% !important;
+                height: 36px;
+            }
+
+            .ngb-dp-day {
+                >div[ngbdatepickerdayview] {
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}
+
+.ngb-dp-navigation-select {
+    gap: 10px;
+}
+
+.widgets-calendar {
+    .datepicker-here {
+        margin-top: -45px;
+    }
+}
+
+body {
+    &.dark-sidebar {
+        .page-wrapper {
+            &.horizontal-wrapper {
+                .page-body-wrapper {
+                    .sidebar-wrapper {
+                        .sidebar-main {
+                            .sidebar-links {
+                                >li {
+                                    >a {
+                                        svg {
+                                            stroke: $white !important;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.balance-profile {
+    ul {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin-top: 16px;
+
+        @media (max-width: 1660px) {
+            gap: 25px;
+        }
+
+        li {
+            position: relative;
+
+            +li {
+                &::before {
+                    position: absolute;
+                    content: '';
+                    left: -25px;
+                    top: 50%;
+                    height: 40px;
+                    transform: translateY(-50%);
+                    border: 1px dashed var(--recent-dashed-border);
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: -25px;
+                    }
+
+                    @media (max-width: 1660px) {
+                        left: -16px;
+
+                        [dir="rtl"] & {
+                            right: -16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes tada {
+    0% {
+        transform: scaleX(1);
+    }
+
+    10% {
+        transform: scale3d(.9, .9, .9) rotate(-3deg);
+    }
+
+    20% {
+        transform: scale3d(.9, .9, .9) rotate(-3deg);
+    }
+
+    30% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    }
+
+    50% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    }
+
+    70% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    }
+
+    90% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    }
+
+    40% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    }
+
+    60% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    }
+
+    80% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.tada {
+    animation-name: tada;
+}
+
+ngb-datepicker {
+    width: 100%;
+    border: 0 !important;
+
+    .ngb-dp-header {
+        background-color: transparent;
+        padding: 12px 0 12px;
+
+        .ngb-dp-arrow-btn {
+            color: $theme-body-font-color;
+            width: 34px;
+            height: 34px;
+            margin: 0;
+            border-radius: 30px;
+
+            span {
+                width: 8px;
+                height: 8px;
+            }
+        }
+    }
+
+    .ngb-dp-weekday {
+        color: $primary-color;
+        font-weight: 600;
+        font-style: initial;
+    }
+
+    .ngb-dp-content {
+        .ngb-dp-week {
+            .btn-light {
+                background-color: transparent !important;
+                border-color: transparent !important;
+                color: $theme-body-font-color;
+
+                &:hover {
+                    background-color: $primary-color !important;
+                    border-color: $primary-color !important;
+                    color: $white;
+                    outline: 0;
+
+                    &.text-muted {
+                        color: $white !important;
+                    }
+                }
+
+                &.text-white {
+                    background-color: $primary-color !important;
+                    border: 1px solid $primary-color !important;
+                    color: $white !important;
+                }
+            }
+        }
+    }
+
+    .ngb-dp-weekdays {
+        background-color: transparent;
+        border-bottom: 0;
+    }
+}
+
+.faq-form {
+    .form-control {
+        padding: 8px 40px 8px 8px;
+    }
+}
+
+.info-Segmented-custom {
+    top: 38px;
+}
+
+.edit-table-custom {
+    tbody {
+        tr {
+            &:last-child {
+                border-bottom: 1px solid $light-color;
+            }
+        }
+    }
+}
+
+.ngx-slider {
+    .ngx-slider-pointer {
+        background-color: $primary-color !important;
+    }
+}
+
+.ngx-slider {
+    .ngx-slider-selection {
+        background: $primary-color !important;
+    }
+}
+
+.custom-Segmented-down {
+    right: -1px;
+    top: 40px;
+}
+
+.alert-primary {
+    .alert-link {
+        color: $white;
+    }
+}
+
+.br-square {
+    .br-unit-inner {
+        &::after {
+            color: $white;
+        }
+    }
+}
+
+.ng-select.ng-select-single {
+    .ng-select-container {
+        .ng-value-container {
+            .ng-input {
+                top: -10px !important;
+            }
+        }
+    }
+}
+
+.timeline-content {
+    .comments-box {
+        .input-group {
+            .input-group-append {
+                background-color: $body-color !important;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+        }
+    }
+}
+
+.datepicker-here {
+    ngb-datepicker {
+        .ngb-dp-month {
+            width: 100%;
+
+            .ngb-dp-weekday,
+            .ngb-dp-day {
+                width: 100%;
+                height: 46px !important;
+            }
+
+            .ngb-dp-day {
+                >div[ngbdatepickerdayview] {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.angular-editor-toolbar {
+    button {
+        &:active {
+            background-color: rgba($primary-color, 0.1) !important;
+        }
+
+        &:hover {
+            background-color: rgba($primary-color, 0.1) !important;
+        }
+
+        &.active {
+            background-color: rgba($primary-color, 0.1) !important;
+        }
+    }
+}
+
+.ngb-dp-navigation-select {
+    gap: 10px;
+}
+
+.recent-order {
+    .project-table {
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+
+        table {
+            tbody {
+                tr {
+                    &:last-child {
+                        td {
+                            .product-sub {
+                                .dropdown {
+                                    .dropdown-menu-end {
+                                        transform: translate(-108px, -131px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.email-right-aside {
+    .light-square {
+        .dropdown-menu {
+            top: 65px;
+            right: 0px;
+        }
+    }
+}
+
+.theme-form {
+    ngb-datepicker {
+        .ngb-dp-content {
+            width: 100% !important;
+
+            .ngb-dp-month {
+                width: 100% !important;
+                background-color: var(--white);
+            }
+
+            .ngb-dp-weekday {
+                width: 100% !important;
+                width: 2.5rem !important;
+            }
+
+            .ngb-dp-week {
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .ngb-dp-day {
+                width: 100% !important;
+                width: 2.5rem !important;
+
+                .ngb-dp-today {
+                    background-color: $primary-color;
+                    color: $white;
+
+                    ngbdatepickerdayview {
+                        background-color: $primary-color !important;
+                        border-color: $primary-color !important;
+                    }
+                }
+
+                .custom-day {
+                    &:hover {
+                        color: $primary-color !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes swing-1 {
+    20% {
+        transform: rotate(15deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    80% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.modal {
+    .product-details {
+        .product-size {
+            ul {
+                li {
+                    .btn-outline-light {
+                        color: $theme-body-font-color !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.custom-multi-upload {
+    .customize-dropzone {
+        border: 2px dashed $secondary-color !important; 
+    }
+}
+.custom-drop-post{
+    &.add-post {
+        .custom-dropzone {
+            border: 2px dashed $primary-color !important;
+            border-radius: 15px;
+            dropzone {
+                >.dropzone.dz-wrapper {
+                    .dz-message {
+                        background-color: unset !important;
+                        border: none !important; 
+                    }
+                }
+            }
+        }
+    }
+}
+
+.custom-single-upload {
+    .customize-dropzone {
+        .dropzone {
+            background-color: unset !important;
+            border: unset !important;
+        }
+        border: 2px dashed $secondary-color !important;  
+    }
+}
+.customize-dropzone {
+    border: 2px dashed $primary-color !important;
+    border-radius: 15px;
+
+    dropzone {
+        >.dropzone.dz-wrapper {
+            background-color: unset;
+            border: none !important;
+            margin: 0px auto;
+            font-size: 35px;
+            .dz-message {
+                background-color: unset;
+                border: none;
+                margin: 0px !important;
+                min-height: 77px;
+                overflow: hidden; 
+                padding-top: 17px;
+                .dz-text {
+                    background-color: unset;
+                    border: none;
+                    padding: 0px !important;
+                }
+
+            }
+        }
+
+        .dz-preview {
+            .dz-image {
+                height: 120px !important;
+                width: 120px !important;
+                margin: 0 auto;
+            }
+        }
+
+        .dz-wrapper {
+            &.dz-single {
+                .dz-preview {
+                    width: 120px !important;
+                }
+            }
+        }
+
+        .dz-details {
+            padding: 0;
+
+            .dz-filename {
+                span {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    white-space: normal;
+                }
+            }
+        }
+    }
+}
+
+.dropzone-custom {
+    .dropzone {
+        margin-right: auto;
+        margin-left: auto;
+        padding: 50px;
+        border: 2px dashed var(--solid-border);
+        border-radius: 15px;
+        background: rgba($primary-color, 0.3);
+        min-height: 150px;
+
+    }
+
+    .dropzone .dz-preview .dz-image {
+        border-radius: 5px;
+        border: none;
+    }
+
+    .dropzone i {
+        font-size: 50px;
+        color: var(--theme-deafult);
+        text-align: center;
+    }
+
+}
+
+.dropzone {
+    .dz-preview {
+        .dz-details {
+            position: absolute !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 50% !important;
+            transform: translateY(-50%);
+            padding: 24px 10px !important;
+        }
+
+        .dz-success-mark {
+            z-index: 2222222;
+        }
+
+        .dz-progress {
+            z-index: 222222;
+        }
+    }
+}
+
+dropzone {
+    >.dropzone {
+        &.dz-wrapper {
+            .dz-preview {
+                .dz-filename {
+                    span {
+                        text-overflow: ellipsis !important;
+                        overflow: hidden !important;
+                        display: -webkit-box !important;
+                        -webkit-line-clamp: 1 !important;
+                        -webkit-box-orient: vertical !important;
+                        white-space: normal !important;
+                    }
+                }
+
+                .dz-remove {
+                    color: var(--light-font);
+
+                    [data-theme="dark"] & {
+                        color: var(--card-color);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**=====================
+    4.3 Update CSS Ends
+==========================**/

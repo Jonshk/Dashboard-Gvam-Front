@@ -1,0 +1,75 @@
+.reports-page {
+    padding: 20px;
+    
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: #2c3e50;
+      text-align: center;
+    }
+    
+    .search-container {
+      margin-bottom: 15px;
+      
+      input {
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    }
+    
+    .reports-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      
+      th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      
+      th {
+        background-color: #599898;
+        color: white;
+        font-weight: bold;
+      }
+      
+      tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: left;
+      gap: 10px;
+      
+      button {
+        padding: 10px 15px;
+        border: none;
+        background-color: #599898;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        font-size: 1rem;
+      }
+      
+      button:hover {
+        background-color: #599898;
+      }
+      
+      /* Puedes ajustar el botón de generar reporte si deseas un color distinto */
+      button.btn-success {
+        background-color: #599898;
+      }
+      
+      button.btn-success:hover {
+        background-color: #599898;
+      }
+    }
+  }
+  

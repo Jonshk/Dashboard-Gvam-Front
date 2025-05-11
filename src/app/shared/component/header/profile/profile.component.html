@@ -1,0 +1,17 @@
+<li class="profile-nav onhover-dropdown" (click)="open()">
+  <div class="media profile-media">
+    <div class="rounded-circle bg-light p-2">
+      <app-feathericon [icon]="'user'"></app-feathericon>
+    </div>
+  </div>
+  <ul
+    class="profile-dropdown onhover-show-div"
+    [ngClass]="{ active: show == true }"
+  >
+    <li>
+      <a class="btn btn-pill btn-outline-primary btn-sm" (click)="logOut()"
+        >Cerrar sesión</a
+      >
+    </li>
+  </ul>
+</li>

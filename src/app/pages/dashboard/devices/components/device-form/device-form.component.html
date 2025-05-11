@@ -1,0 +1,70 @@
+@if (!registerQr) {
+  <form
+    class="d-flex flex-column gap-3"
+    [formGroup]="deviceForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <label>
+      Nombre del dispositivo
+      <input
+        type="text"
+        class="form-control"
+        name="name"
+        formControlName="name"
+      />
+    </label>
+
+    @if (!groupId() && !editDevice()) {
+      <label>
+        Grupo (Opcional)
+        <select class="form-select" name="group" formControlName="group">
+          @for (group of groups(); track group.groupId) {
+            <option [value]="group.groupId">
+              {{ group.groupName }}
+            </option>
+          }
+        </select>
+      </label>
+    }
+
+    <label>
+      Usuario del dispositivo (Opcional)
+      <select class="form-select" name="user" formControlName="user">
+        @for (deviceUser of deviceUsers(); track deviceUser.deviceUserId) {
+          <option [value]="deviceUser.deviceUserId">
+            {{ deviceUser.email }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <button
+      type="submit"
+      class="btn btn-primary mt-2"
+      [disabled]="deviceForm.invalid || loadingService.isLoading()"
+    >
+      @if (editDevice()) {
+        Editar dispositivo
+      } @else {
+        Crear dispositivo
+      }
+    </button>
+  </form>
+} @else {
+  <div
+    class="d-flex flex-column justify-content-center align-items-center py-4"
+  >
+    <p class="fs-2">{{ deviceName }}</p>
+    <p class="fs-2">{{ pin }}</p>
+    <img [src]="registerQr" alt="Código QR de registro" />
+    <small>
+      El QR solo podrá ser usado para registrar un dispositivo. Si no va a
+      escanearlo ahora, guárdelo para escanearlo más tarde. El QR caducará en un
+      día.
+    </small>
+    <small>El PIN podrá ser consultado en los detalles del dispositivo.</small>
+    <button class="btn btn-primary w-75 mt-2" (click)="createNewDevice()">
+      Crear nuevo dispositivo
+    </button>
+  </div>
+}

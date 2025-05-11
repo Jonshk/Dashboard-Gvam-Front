@@ -1,0 +1,115 @@
+.orders-page {
+  padding: 1.5rem;
+
+  h2 {
+    font-size: 1.75rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+
+  .search-container {
+    margin-bottom: 1rem;
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  }
+
+  .orders-tabs {
+    margin-bottom: 1rem;
+
+    .nav-link {
+      color: #599898;
+      cursor: pointer;
+    }
+    .nav-link.active {
+      background-color: #599898;
+      color: white;
+    }
+  }
+
+  .orders-table {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    thead {
+      background-color: #599898;
+      color: white;
+    }
+
+    th,
+    td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+  }
+
+  .action-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+
+    .btn-primary {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+    .btn-primary:hover {
+      background-color: #1f6391;
+      border-color: #1f6391;
+    }
+  }
+
+  /* Modales */
+  .modal-custom {
+    border-radius: 0.5rem;
+  }
+  .modal-header-custom {
+    background-color: #599898;
+    color: white;
+    border-bottom: none;
+    .modal-title {
+      font-weight: bold;
+    }
+  }
+  .modal-body-custom {
+    padding: 1.5rem;
+    p,
+    h6 {
+      color: #333;
+    }
+  }
+  .modal-footer-custom {
+    border-top: none;
+    padding: 1rem 1.5rem;
+    justify-content: flex-end;
+
+    .btn-secondary {
+      background-color: #ccc;
+      border-color: #ccc;
+    }
+    .btn-secondary:hover {
+      background-color: #bbb;
+      border-color: #bbb;
+    }
+  }
+
+  /* Fuerza el fondo de los botones de cierre en blanco */
+  .btn-close-white {
+    filter: invert(1);
+  }
+}

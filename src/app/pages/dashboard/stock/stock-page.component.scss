@@ -1,0 +1,16 @@
+.stock-page {
+    .stock-table {
+      width: 100%;
+      
+      th,
+      td {
+        text-align: center;       // Centra el texto en cada celda
+        vertical-align: middle;   // Alinea el contenido verticalmente al centro
+      }
+    }
+  }
+  .actions {
+    margin-top: 1rem; // Ajusta la separación vertical
+    text-align: left; // Opcional: alinea el botón a la derecha
+  }
+  

@@ -1,0 +1,57 @@
+.centers-inventory-page {
+    h2 {
+      margin-bottom: 1rem;
+      color: #599898;
+    }
+    .table thead {
+      background-color: #599898;
+    }
+    .table thead th {
+      color: #599898;
+      text-align: center;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+      text-align: center;
+    }
+    form {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+  }
+  
+
+  .btn-icon-only {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;    // esquinas cuadradas
+    font-size: 1.25rem;
+  }
+  
+
+ // Sobrescribimos el color del btn-success solo cuando viene con btn-icon-only
+.btn-icon-only.btn-success {
+  background-color: #599898 !important;
+  border-color:     #599898 !important;
+  color:            #fff !important;  // para que el icono salga blanco
+}
+
+// Opcional: un efecto hover ligero
+.btn-icon-only.btn-success:hover {
+  background-color: darken(#599898, 10%) !important;
+  border-color:     darken(#599898, 10%) !important;
+}
+
+.thead-custom {
+  background-color: #599898;  // o el color que quieras
+}
+
+.thead-custom th {
+  color: #599898;             // texto en verde, o el tono deseado
+  text-align: center;         // si quieres centrar
+}
